@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Download, Trash2, Calendar, DollarSign, Store, Tag } from 'lucide-react';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, deleteDoc, doc, Timestamp, query, orderBy } from 'firebase/firestore';
@@ -173,12 +174,12 @@ export default function HistoryPage() {
 
                 {/* 戻るボタン */}
                 <div className="mt-8 text-center">
-                    <a
+                    <Link
                         href="/"
                         className="inline-block px-8 py-4 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all"
                     >
                         ← トップに戻る
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>

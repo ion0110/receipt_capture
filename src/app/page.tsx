@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { Camera, Upload, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import { analyzeReceipt, ReceiptData } from '@/lib/gemini';
 import { db } from '@/lib/firebase';
@@ -274,12 +275,12 @@ export default function Home() {
 
         {/* フッター */}
         <footer className="text-center mt-8 space-y-4">
-          <a
+          <Link
             href="/history"
             className="inline-block bg-white/10 text-white px-6 py-3 rounded-xl hover:bg-white/20 transition-all font-semibold"
           >
             📊 経費履歴を見る
-          </a>
+          </Link>
           <p className="text-gray-400 text-sm">Powered by Gemini Flash & Firebase</p>
         </footer>
       </div>

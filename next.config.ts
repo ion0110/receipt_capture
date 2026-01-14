@@ -6,8 +6,8 @@ const nextConfig: NextConfig = {
     unoptimized: true, // 静的エクスポート時は画像最適化を無効化
   },
   // GitHub Pagesでリポジトリ名をサブパスにする場合は以下を設定
-  // basePath: '/repository-name',
-  // assetPrefix: '/repository-name/',
+  basePath: '/receipt_capture',
+  assetPrefix: '/receipt_capture/',
 };
 
 export default nextConfig;

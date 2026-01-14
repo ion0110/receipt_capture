@@ -15,7 +15,7 @@ export function getGeminiModel() {
         }
         initializeGemini(apiKey);
     }
-    return genAI!.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    return genAI!.getGenerativeModel({ model: 'gemini-pro-vision' });
 }
 
 export interface ReceiptData {

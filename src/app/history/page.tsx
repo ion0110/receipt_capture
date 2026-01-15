@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Download, Trash2, Calendar, Store, Tag, LogOut, Coins } from 'lucide-react';
+import { Download, Trash2, Calendar, Store, Tag, LogOut, Coins, Search, X } from 'lucide-react';
 import { db, signOut } from '@/lib/firebase';
 import { collection, getDocs, deleteDoc, doc, Timestamp, query, orderBy } from 'firebase/firestore';
 import { useAuth } from '@/contexts/auth-context';
@@ -22,6 +22,8 @@ export default function HistoryPage() {
     const { user, loading } = useAuth();
     const [receipts, setReceipts] = useState<Receipt[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [searchKeyword, setSearchKeyword] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('');
 
     // 未ログイン時はログインページにリダイレクト
     useEffect(() => {
@@ -88,8 +90,24 @@ export default function HistoryPage() {
         }
     };
 
-    // 合計金額計算
-    const totalAmount = receipts.reduce((sum, r) => sum + r.amount, 0);
+    // フィルタリングロジック
+    const filteredReceipts = receipts.filter(receipt => {
+        // 検索キーワードフィルター
+        if (searchKeyword) {
+            const keyword = searchKeyword.toLowerCase();
+            const matchesStore = receipt.store?.toLowerCase().includes(keyword);
+            const matchesCategory = receipt.category?.toLowerCase().includes(keyword);
+            if (!matchesStore && !matchesCategory) return false;
+        }
+        // カテゴリフィルター
+        if (selectedCategory && receipt.category !== selectedCategory) {
+            return false;
+        }
+        return true;
+    });
+
+    // 合計金額計算（フィルター後）
+    const totalAmount = filteredReceipts.reduce((sum, r) => sum + r.amount, 0);
 
     if (loading || isLoading) {
         return (
@@ -142,9 +160,53 @@ export default function HistoryPage() {
                         <div>
                             <p className="text-gray-300 text-sm mb-2">登録件数</p>
                             <p className="text-4xl font-bold text-emerald-400">
-                                {receipts.length}
+                                {filteredReceipts.length}
                             </p>
                         </div>
+                    </div>
+                </div>
+
+                {/* 検索・フィルターセクション */}
+                <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 shadow-2xl border border-white/20 mb-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {/* 検索バー */}
+                        <div className="relative">
+                            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                            <input
+                                type="text"
+                                placeholder="店名やカテゴリで検索..."
+                                value={searchKeyword}
+                                onChange={(e) => setSearchKeyword(e.target.value)}
+                                className="w-full pl-12 pr-10 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                            />
+                            {searchKeyword && (
+                                <button
+                                    onClick={() => setSearchKeyword('')}
+                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+                            )}
+                        </div>
+
+                        {/* カテゴリフィルター */}
+                        <select
+                            value={selectedCategory}
+                            onChange={(e) => setSelectedCategory(e.target.value)}
+                            className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                        >
+                            <option value="">すべてのカテゴリ</option>
+                            <option value="食費">食費</option>
+                            <option value="交通費">交通費</option>
+                            <option value="書籍・文房具">書籍・文房具</option>
+                            <option value="日用品">日用品</option>
+                            <option value="衣類">衣類</option>
+                            <option value="医療費">医療費</option>
+                            <option value="娯楽">娯楽</option>
+                            <option value="通信費">通信費</option>
+                            <option value="光熱費">光熱費</option>
+                            <option value="その他">その他</option>
+                        </select>
                     </div>
                 </div>
 
@@ -162,12 +224,14 @@ export default function HistoryPage() {
 
                 {/* 履歴リスト */}
                 <div className="space-y-4">
-                    {receipts.length === 0 ? (
+                    {filteredReceipts.length === 0 ? (
                         <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-12 shadow-2xl border border-white/20 text-center">
-                            <p className="text-gray-300 text-lg">まだ経費が登録されていません</p>
+                            <p className="text-gray-300 text-lg">
+                                {searchKeyword || selectedCategory ? '該当する経費が見つかりません' : 'まだ経費が登録されていません'}
+                            </p>
                         </div>
                     ) : (
-                        receipts.map((receipt) => (
+                        filteredReceipts.map((receipt) => (
                             <div
                                 key={receipt.id}
                                 className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/20 hover:bg-white/15 transition-all"

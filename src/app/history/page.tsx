@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Download, Trash2, Calendar, DollarSign, Store, Tag, LogOut } from 'lucide-react';
+import { Download, Trash2, Calendar, Store, Tag, LogOut, Coins } from 'lucide-react';
 import { db, signOut } from '@/lib/firebase';
 import { collection, getDocs, deleteDoc, doc, Timestamp, query, orderBy } from 'firebase/firestore';
 import { useAuth } from '@/contexts/auth-context';
@@ -186,6 +186,7 @@ export default function HistoryPage() {
                                             </span>
                                         </div>
                                         <div className="flex items-center gap-2">
+                                            <Coins className="w-5 h-5 text-emerald-400" />
                                             <span className="text-2xl font-bold text-white">
                                                 ¥{receipt.amount.toLocaleString()}
                                             </span>

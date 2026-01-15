@@ -19,6 +19,7 @@ export default function Home() {
   const [error, setError] = useState<string>('');
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   // 未ログイン時はログインページにリダイレクト
   useEffect(() => {
@@ -31,11 +32,40 @@ export default function Home() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      processFile(file);
+    }
+  };
+
+  // ファイル処理の共通関数
+  const processFile = (file: File) => {
+    if (file.type.startsWith('image/')) {
       setSelectedFile(file);
       setPreviewUrl(URL.createObjectURL(file));
       setReceiptData(null);
       setError('');
       setSaveSuccess(false);
+    } else {
+      setError('画像ファイルを選択してください');
+    }
+  };
+
+  // ドラッグ＆ドロップハンドラー
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      processFile(file);
     }
   };
 
@@ -98,7 +128,7 @@ export default function Home() {
         <header className="mb-12">
           <div className="flex justify-between items-center mb-6">
             <div className="flex-1"></div>
-            <h1 className="text-5xl font-bold text-white tracking-tight flex-1 text-center">
+            <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight text-center whitespace-nowrap">
               📸 パシャッと経費
             </h1>
             <div className="flex-1 flex justify-end">
@@ -126,7 +156,12 @@ export default function Home() {
         <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-white/20">
           {/* カメラ/アップロードセクション */}
           {!selectedFile && (
-            <div className="space-y-4">
+            <div
+              className={`space-y-4 ${isDragging ? '' : ''}`}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
               <label
                 htmlFor="camera-input"
                 className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-emerald-400/50 rounded-2xl cursor-pointer hover:bg-white/5 transition-all group"
@@ -146,10 +181,18 @@ export default function Home() {
 
               <label
                 htmlFor="file-input"
-                className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-indigo-400/50 rounded-2xl cursor-pointer hover:bg-white/5 transition-all group"
+                className={`flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-2xl cursor-pointer transition-all group ${isDragging
+                  ? 'border-emerald-500 bg-emerald-500/20'
+                  : 'border-indigo-400/50 hover:bg-white/5'
+                  }`}
               >
                 <Upload className="w-12 h-12 text-indigo-400 mb-3 group-hover:scale-110 transition-transform" />
-                <span className="text-white text-lg font-semibold">ファイルから選択</span>
+                <span className="text-white text-lg font-semibold">
+                  {isDragging ? '📂 ここにドロップ' : 'ファイルから選択'}
+                </span>
+                {!isDragging && (
+                  <span className="text-gray-300 text-sm mt-2">またはドラッグ&ドロップ</span>
+                )}
               </label>
               <input
                 id="file-input"
@@ -220,14 +263,24 @@ export default function Home() {
               <div className="bg-white/5 p-6 rounded-2xl space-y-4">
                 <h2 className="text-2xl font-bold text-white mb-4">📝 解析結果</h2>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">日付</label>
-                  <input
-                    type="date"
-                    value={receiptData.date}
-                    onChange={(e) => handleChange('date', e.target.value)}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-                  />
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">日付</label>
+                    <input
+                      type="date"
+                      value={receiptData.date}
+                      onChange={(e) => handleChange('date', e.target.value)}
+                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">時間</label>
+                    <input
+                      type="time"
+                      defaultValue={new Date().toTimeString().slice(0, 5)}
+                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                    />
+                  </div>
                 </div>
 
                 <div>

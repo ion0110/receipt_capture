@@ -3,11 +3,11 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Download, Trash2, Calendar, Store, Tag, LogOut, Coins, Search, X, Palette } from 'lucide-react';
+import { Download, Trash2, Calendar, Store, Tag, LogOut, Coins, Search, X, Moon, Sun } from 'lucide-react';
 import { db, signOut } from '@/lib/firebase';
 import { collection, getDocs, deleteDoc, doc, Timestamp, query, orderBy } from 'firebase/firestore';
 import { useAuth } from '@/contexts/auth-context';
-import { useTheme, themes, Theme } from '@/contexts/theme-context';
+import { useTheme } from '@/contexts/theme-context';
 
 interface Receipt {
     id: string;
@@ -21,8 +21,8 @@ interface Receipt {
 export default function HistoryPage() {
     const router = useRouter();
     const { user, loading } = useAuth();
-    const { theme, setTheme } = useTheme();
-    const currentTheme = themes[theme];
+    const { theme, toggleTheme } = useTheme();
+    const isDark = theme === 'dark';
     const [receipts, setReceipts] = useState<Receipt[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [searchKeyword, setSearchKeyword] = useState('');
@@ -121,7 +121,7 @@ export default function HistoryPage() {
     }
 
     return (
-        <div className={`min-h-screen bg-gradient-to-br ${currentTheme.gradient}`}>
+        <div className={isDark ? 'min-h-screen bg-gradient-to-br from-indigo-950 via-slate-900 to-emerald-950' : 'min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50'}>
             <div className="container mx-auto px-4 py-8 max-w-6xl">
                 {/* ヘッダー */}
                 <header className="mb-12">

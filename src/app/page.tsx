@@ -3,18 +3,18 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Camera, Upload, Loader2, CheckCircle, AlertCircle, LogOut, Palette } from 'lucide-react';
+import { Camera, Upload, Loader2, CheckCircle, AlertCircle, LogOut, Moon, Sun } from 'lucide-react';
 import { analyzeReceipt, ReceiptData } from '@/lib/gemini';
 import { db, signOut } from '@/lib/firebase';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { useAuth } from '@/contexts/auth-context';
-import { useTheme, themes, Theme } from '@/contexts/theme-context';
+import { useTheme } from '@/contexts/theme-context';
 
 export default function Home() {
   const router = useRouter();
   const { user, loading } = useAuth();
-  const { theme, setTheme } = useTheme();
-  const currentTheme = themes[theme];
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === 'dark';
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -125,7 +125,7 @@ export default function Home() {
   };
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br ${currentTheme.gradient}`}>
+    <div className={isDark ? 'min-h-screen bg-gradient-to-br from-indigo-950 via-slate-900 to-emerald-950' : 'min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50'}>
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* ヘッダー */}
         <header className="mb-12">
@@ -136,16 +136,11 @@ export default function Home() {
             </h1>
             <div className="flex-1 flex justify-end gap-2">
               <button
-                onClick={() => {
-                  const themeOrder: Theme[] = ['default', 'blue', 'pink', 'orange'];
-                  const currentIndex = themeOrder.indexOf(theme);
-                  const nextTheme = themeOrder[(currentIndex + 1) % themeOrder.length];
-                  setTheme(nextTheme);
-                }}
-                className="bg-white/10 text-white px-3 py-2 rounded-xl hover:bg-white/20 transition-all flex items-center"
-                title="テーマ切り替え"
+                onClick={toggleTheme}
+                className={isDark ? 'bg-white/10 text-white px-3 py-2 rounded-xl hover:bg-white/20 transition-all flex items-center' : 'bg-gray-200 text-gray-800 px-3 py-2 rounded-xl hover:bg-gray-300 transition-all flex items-center'}
+                title={isDark ? 'ライトモードに切り替え' : 'ダークモードに切り替え'}
               >
-                <Palette className="w-4 h-4" />
+                {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
               </button>
               <button
                 onClick={async () => {

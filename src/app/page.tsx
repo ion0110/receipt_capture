@@ -3,15 +3,18 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Camera, Upload, Loader2, CheckCircle, AlertCircle, LogOut } from 'lucide-react';
+import { Camera, Upload, Loader2, CheckCircle, AlertCircle, LogOut, Palette } from 'lucide-react';
 import { analyzeReceipt, ReceiptData } from '@/lib/gemini';
 import { db, signOut } from '@/lib/firebase';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { useAuth } from '@/contexts/auth-context';
+import { useTheme, themes, Theme } from '@/contexts/theme-context';
 
 export default function Home() {
   const router = useRouter();
   const { user, loading } = useAuth();
+  const { theme } = useTheme();
+  const currentTheme = themes[theme];
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -122,7 +125,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-slate-900 to-emerald-950">
+    <div className={`min-h-screen bg-gradient-to-br ${currentTheme.gradient}`}>
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* ヘッダー */}
         <header className="mb-12">

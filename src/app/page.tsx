@@ -13,7 +13,7 @@ import { useTheme, themes, Theme } from '@/contexts/theme-context';
 export default function Home() {
   const router = useRouter();
   const { user, loading } = useAuth();
-  const { theme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const currentTheme = themes[theme];
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>('');
@@ -134,7 +134,19 @@ export default function Home() {
             <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight text-center whitespace-nowrap">
               📸 パシャッと経費
             </h1>
-            <div className="flex-1 flex justify-end">
+            <div className="flex-1 flex justify-end gap-2">
+              <button
+                onClick={() => {
+                  const themeOrder: Theme[] = ['default', 'blue', 'pink', 'orange'];
+                  const currentIndex = themeOrder.indexOf(theme);
+                  const nextTheme = themeOrder[(currentIndex + 1) % themeOrder.length];
+                  setTheme(nextTheme);
+                }}
+                className="bg-white/10 text-white px-3 py-2 rounded-xl hover:bg-white/20 transition-all flex items-center"
+                title="テーマ切り替え"
+              >
+                <Palette className="w-4 h-4" />
+              </button>
               <button
                 onClick={async () => {
                   await signOut();

@@ -1,13 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Camera, Upload, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
+import { Camera, Upload, Loader2, CheckCircle, AlertCircle, LogOut } from 'lucide-react';
 import { analyzeReceipt, ReceiptData } from '@/lib/gemini';
-import { db } from '@/lib/firebase';
+import { db, signOut } from '@/lib/firebase';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
+import { useAuth } from '@/contexts/auth-context';
 
 export default function Home() {
+  const router = useRouter();
+  const { user, loading } = useAuth();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -15,6 +19,13 @@ export default function Home() {
   const [error, setError] = useState<string>('');
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+
+  // 未ログイン時はログインページにリダイレクト
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
 
   // 画像選択/撮影ハンドラー
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,15 +56,16 @@ export default function Home() {
     }
   };
 
-  // Firestoreに保存
+  // Firestoreに保存（ユーザーIDごとに分離）
   const handleSave = async () => {
-    if (!receiptData) return;
+    if (!receiptData || !user) return;
 
     setIsSaving(true);
     setError('');
 
     try {
-      await addDoc(collection(db, 'receipts'), {
+      // receipts/{userId}/items/{receiptId} 構造で保存
+      await addDoc(collection(db, 'receipts', user.uid, 'items'), {
         ...receiptData,
         createdAt: Timestamp.now(),
       });
@@ -275,12 +287,27 @@ export default function Home() {
 
         {/* フッター */}
         <footer className="text-center mt-8 space-y-4">
-          <Link
-            href="/history"
-            className="inline-block bg-white/10 text-white px-6 py-3 rounded-xl hover:bg-white/20 transition-all font-semibold"
-          >
-            📊 経費履歴を見る
-          </Link>
+          <div className="flex items-center justify-center gap-4">
+            <Link
+              href="/history"
+              className="inline-block bg-white/10 text-white px-6 py-3 rounded-xl hover:bg-white/20 transition-all font-semibold"
+            >
+              📊 経費履歴を見る
+            </Link>
+            <button
+              onClick={async () => {
+                await signOut();
+                router.push('/login');
+              }}
+              className="inline-block bg-red-500/20 text-red-300 px-6 py-3 rounded-xl hover:bg-red-500/30 transition-all font-semibold flex items-center gap-2"
+            >
+              <LogOut className="w-4 h-4" />
+              ログアウト
+            </button>
+          </div>
+          {user && (
+            <p className="text-gray-400 text-sm">ログイン中: {user.email}</p>
+          )}
           <p className="text-gray-400 text-sm">Powered by Gemini Flash & Firebase</p>
         </footer>
       </div>

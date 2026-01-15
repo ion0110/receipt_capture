@@ -1,5 +1,14 @@
 import { initializeApp, getApps } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut as firebaseSignOut,
+    GoogleAuthProvider,
+    signInWithPopup,
+    User
+} from 'firebase/auth';
 
 const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -15,5 +24,26 @@ const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0
 
 // Firestoreインスタンスを取得
 export const db = getFirestore(app);
+
+// Firebase Authenticationインスタンスを取得
+export const auth = getAuth(app);
+
+// 認証関数
+export const signUpWithEmail = async (email: string, password: string) => {
+    return await createUserWithEmailAndPassword(auth, email, password);
+};
+
+export const signInWithEmail = async (email: string, password: string) => {
+    return await signInWithEmailAndPassword(auth, email, password);
+};
+
+export const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    return await signInWithPopup(auth, provider);
+};
+
+export const signOut = async () => {
+    return await firebaseSignOut(auth);
+};
 
 export default app;

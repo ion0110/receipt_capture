@@ -1,10 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Download, Trash2, Calendar, DollarSign, Store, Tag } from 'lucide-react';
-import { db } from '@/lib/firebase';
+import { Download, Trash2, Calendar, DollarSign, Store, Tag, LogOut } from 'lucide-react';
+import { db, signOut } from '@/lib/firebase';
 import { collection, getDocs, deleteDoc, doc, Timestamp, query, orderBy } from 'firebase/firestore';
+import { useAuth } from '@/contexts/auth-context';
 
 interface Receipt {
     id: string;
@@ -16,17 +18,34 @@ interface Receipt {
 }
 
 export default function HistoryPage() {
+    const router = useRouter();
+    const { user, loading } = useAuth();
     const [receipts, setReceipts] = useState<Receipt[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
+
+    // 未ログイン時はログインページにリダイレクト
+    useEffect(() => {
+        if (!loading && !user) {
+            router.push('/login');
+        }
+    }, [user, loading, router]);
 
     // Firestoreからデータ取得
     useEffect(() => {
-        fetchReceipts();
-    }, []);
+        if (user) {
+            fetchReceipts();
+        }
+    }, [user]);
 
     const fetchReceipts = async () => {
+        if (!user) return;
+
         try {
-            const q = query(collection(db, 'receipts'), orderBy('createdAt', 'desc'));
+            // ユーザーID別にデータ取得
+            const q = query(
+                collection(db, 'receipts', user.uid, 'items'),
+                orderBy('createdAt', 'desc')
+            );
             const querySnapshot = await getDocs(q);
             const data: Receipt[] = querySnapshot.docs.map((doc) => ({
                 id: doc.id,
@@ -36,7 +55,7 @@ export default function HistoryPage() {
         } catch (error) {
             console.error('データ取得エラー:', error);
         } finally {
-            setLoading(false);
+            setIsLoading(false);
         }
     };
 
@@ -59,10 +78,10 @@ export default function HistoryPage() {
 
     // 削除
     const handleDelete = async (id: string) => {
-        if (!confirm('本当に削除しますか？')) return;
+        if (!confirm('本当に削除しますか？') || !user) return;
 
         try {
-            await deleteDoc(doc(db, 'receipts', id));
+            await deleteDoc(doc(db, 'receipts', user.uid, 'items', id));
             setReceipts(receipts.filter((r) => r.id !== id));
         } catch (error) {
             console.error('削除エラー:', error);
@@ -72,7 +91,7 @@ export default function HistoryPage() {
     // 合計金額計算
     const totalAmount = receipts.reduce((sum, r) => sum + r.amount, 0);
 
-    if (loading) {
+    if (loading || isLoading) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-slate-900 to-emerald-950 flex items-center justify-center">
                 <div className="text-white text-xl">読み込み中...</div>
@@ -172,14 +191,29 @@ export default function HistoryPage() {
                     )}
                 </div>
 
-                {/* 戻るボタン */}
-                <div className="mt-8 text-center">
-                    <Link
-                        href="/"
-                        className="inline-block px-8 py-4 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all"
-                    >
-                        ← トップに戻る
-                    </Link>
+                {/* 戻るボタンとログアウト */}
+                <div className="mt-8 text-center space-y-4">
+                    <div className="flex items-center justify-center gap-4">
+                        <Link
+                            href="/"
+                            className="inline-block px-8 py-4 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all"
+                        >
+                            ← トップに戻る
+                        </Link>
+                        <button
+                            onClick={async () => {
+                                await signOut();
+                                router.push('/login');
+                            }}
+                            className="inline-block px-8 py-4 bg-red-500/20 text-red-300 rounded-xl hover:bg-red-500/30 transition-all flex items-center gap-2"
+                        >
+                            <LogOut className="w-4 h-4" />
+                            ログアウト
+                        </button>
+                    </div>
+                    {user && (
+                        <p className="text-gray-400 text-sm">ログイン中: {user.email}</p>
+                    )}
                 </div>
             </div>
         </div>

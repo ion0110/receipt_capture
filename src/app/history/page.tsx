@@ -103,13 +103,31 @@ export default function HistoryPage() {
         <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-slate-900 to-emerald-950">
             <div className="container mx-auto px-4 py-8 max-w-6xl">
                 {/* ヘッダー */}
-                <header className="text-center mb-12">
-                    <h1 className="text-5xl font-bold text-white mb-3 tracking-tight">
-                        📊 経費履歴
-                    </h1>
-                    <p className="text-emerald-300 text-lg">
+                <header className="mb-12">
+                    <div className="flex justify-between items-center mb-6">
+                        <div className="flex-1"></div>
+                        <h1 className="text-5xl font-bold text-white tracking-tight flex-1 text-center">
+                            📊 経費履歴
+                        </h1>
+                        <div className="flex-1 flex justify-end">
+                            <button
+                                onClick={async () => {
+                                    await signOut();
+                                    router.push('/login');
+                                }}
+                                className="bg-red-500/20 text-red-300 px-4 py-2 rounded-xl hover:bg-red-500/30 transition-all font-semibold flex items-center gap-2"
+                            >
+                                <LogOut className="w-4 h-4" />
+                                ログアウト
+                            </button>
+                        </div>
+                    </div>
+                    <p className="text-emerald-300 text-lg text-center">
                         登録された経費の一覧とエクスポート
                     </p>
+                    {user && (
+                        <p className="text-gray-400 text-sm text-center mt-2">ログイン中: {user.email}</p>
+                    )}
                 </header>
 
                 {/* サマリーカード */}
@@ -158,10 +176,16 @@ export default function HistoryPage() {
                                     <div className="flex-1 space-y-3">
                                         <div className="flex items-center gap-2 text-gray-300">
                                             <Calendar className="w-4 h-4" />
-                                            <span className="text-sm">{receipt.date}</span>
+                                            <span className="text-sm">
+                                                {receipt.date}
+                                                {receipt.createdAt && (
+                                                    <span className="ml-2 text-xs text-gray-400">
+                                                        {new Date(receipt.createdAt.seconds * 1000).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' })}
+                                                    </span>
+                                                )}
+                                            </span>
                                         </div>
                                         <div className="flex items-center gap-2">
-                                            <DollarSign className="w-5 h-5 text-emerald-400" />
                                             <span className="text-2xl font-bold text-white">
                                                 ¥{receipt.amount.toLocaleString()}
                                             </span>
@@ -191,29 +215,14 @@ export default function HistoryPage() {
                     )}
                 </div>
 
-                {/* 戻るボタンとログアウト */}
-                <div className="mt-8 text-center space-y-4">
-                    <div className="flex items-center justify-center gap-4">
-                        <Link
-                            href="/"
-                            className="inline-block px-8 py-4 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all"
-                        >
-                            ← トップに戻る
-                        </Link>
-                        <button
-                            onClick={async () => {
-                                await signOut();
-                                router.push('/login');
-                            }}
-                            className="inline-block px-8 py-4 bg-red-500/20 text-red-300 rounded-xl hover:bg-red-500/30 transition-all flex items-center gap-2"
-                        >
-                            <LogOut className="w-4 h-4" />
-                            ログアウト
-                        </button>
-                    </div>
-                    {user && (
-                        <p className="text-gray-400 text-sm">ログイン中: {user.email}</p>
-                    )}
+                {/* 戻るボタン */}
+                <div className="mt-8 text-center">
+                    <Link
+                        href="/"
+                        className="inline-block px-8 py-4 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all"
+                    >
+                        ← トップに戻る
+                    </Link>
                 </div>
             </div>
         </div>

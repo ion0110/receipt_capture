@@ -95,13 +95,31 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-slate-900 to-emerald-950">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* ヘッダー */}
-        <header className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-white mb-3 tracking-tight">
-            📸 パシャッと経費
-          </h1>
-          <p className="text-emerald-300 text-lg">
+        <header className="mb-12">
+          <div className="flex justify-between items-center mb-6">
+            <div className="flex-1"></div>
+            <h1 className="text-5xl font-bold text-white tracking-tight flex-1 text-center">
+              📸 パシャッと経費
+            </h1>
+            <div className="flex-1 flex justify-end">
+              <button
+                onClick={async () => {
+                  await signOut();
+                  router.push('/login');
+                }}
+                className="bg-red-500/20 text-red-300 px-4 py-2 rounded-xl hover:bg-red-500/30 transition-all font-semibold flex items-center gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                ログアウト
+              </button>
+            </div>
+          </div>
+          <p className="text-emerald-300 text-lg text-center">
             レシートを撮影してAIが自動入力
           </p>
+          {user && (
+            <p className="text-gray-400 text-sm text-center mt-2">ログイン中: {user.email}</p>
+          )}
         </header>
 
         {/* メインコンテンツ */}
@@ -287,27 +305,12 @@ export default function Home() {
 
         {/* フッター */}
         <footer className="text-center mt-8 space-y-4">
-          <div className="flex items-center justify-center gap-4">
-            <Link
-              href="/history"
-              className="inline-block bg-white/10 text-white px-6 py-3 rounded-xl hover:bg-white/20 transition-all font-semibold"
-            >
-              📊 経費履歴を見る
-            </Link>
-            <button
-              onClick={async () => {
-                await signOut();
-                router.push('/login');
-              }}
-              className="inline-block bg-red-500/20 text-red-300 px-6 py-3 rounded-xl hover:bg-red-500/30 transition-all font-semibold flex items-center gap-2"
-            >
-              <LogOut className="w-4 h-4" />
-              ログアウト
-            </button>
-          </div>
-          {user && (
-            <p className="text-gray-400 text-sm">ログイン中: {user.email}</p>
-          )}
+          <Link
+            href="/history"
+            className="inline-block bg-white/10 text-white px-6 py-3 rounded-xl hover:bg-white/20 transition-all font-semibold"
+          >
+            📊 経費履歴を見る
+          </Link>
           <p className="text-gray-400 text-sm">Powered by Gemini Flash & Firebase</p>
         </footer>
       </div>

@@ -198,17 +198,17 @@ export default function HistoryPage() {
                             onChange={(e) => setSelectedCategory(e.target.value)}
                             className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                         >
-                            <option value="">すべてのカテゴリ</option>
-                            <option value="食費">食費</option>
-                            <option value="交通費">交通費</option>
-                            <option value="書籍・文房具">書籍・文房具</option>
-                            <option value="日用品">日用品</option>
-                            <option value="衣類">衣類</option>
-                            <option value="医療費">医療費</option>
-                            <option value="娯楽">娯楽</option>
-                            <option value="通信費">通信費</option>
-                            <option value="光熱費">光熱費</option>
-                            <option value="その他">その他</option>
+                            <option value="" className="text-gray-900">すべてのカテゴリ</option>
+                            <option value="食費" className="text-gray-900">食費</option>
+                            <option value="交通費" className="text-gray-900">交通費</option>
+                            <option value="書籍・文房具" className="text-gray-900">書籍・文房具</option>
+                            <option value="日用品" className="text-gray-900">日用品</option>
+                            <option value="衣類" className="text-gray-900">衣類</option>
+                            <option value="医療費" className="text-gray-900">医療費</option>
+                            <option value="娯楽" className="text-gray-900">娯楽</option>
+                            <option value="通信費" className="text-gray-900">通信費</option>
+                            <option value="光熱費" className="text-gray-900">光熱費</option>
+                            <option value="その他" className="text-gray-900">その他</option>
                         </select>
                     </div>
                 </div>

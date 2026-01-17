@@ -251,26 +251,6 @@ export default function HistoryPage() {
                                 key={receipt.id}
                                 className={isDark ? 'bg-white/10 backdrop-blur-lg rounded-2xl p-4 sm:p-6 shadow-lg border border-white/20 hover:bg-white/15 transition-all' : 'bg-white rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-200 hover:shadow-xl transition-all'}
                             >
-                                <div className="flex justify-between items-start">
-                                    <div className="flex-1 space-y-3">
-                                        <div className="flex items-center gap-2 text-gray-300">
-                                            <Calendar className="w-4 h-4" />
-                                            <span className="text-sm">
-                                                {receipt.date}
-                                                {receipt.createdAt && (
-                                                    <span className="ml-2 text-xs text-gray-400">
-                                                        {new Date(receipt.createdAt.seconds * 1000).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' })}
-                                                    </span>
-                                                )}
-                                            </span>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <Coins className="w-5 h-5 text-emerald-400" />
-                                            <span className="text-2xl font-bold text-white">
-                                                ¥{receipt.amount.toLocaleString()}
-                                            </span>
-                                        </div>
-                                        {receipt.store && (
                                 <div className="flex justify-between items-start mb-4">
                                     <div className="flex items-center gap-3">
                                         <Calendar className={`w-5 h-5 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`} />
@@ -289,46 +269,38 @@ export default function HistoryPage() {
                                 <div className="space-y-3">
                                     <div className="flex items-center gap-2">
                                         <Coins className={`w-5 h-5 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`} />
-                                        <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                        <span className={`text-xl sm:text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                                             ¥{receipt.amount.toLocaleString()}
                                         </span>
                                     </div>
                                     {receipt.store && (
                                         <div className="flex items-center gap-2">
                                             <Store className={`w-4 h-4 ${isDark ? 'text-gray-300' : 'text-gray-500'}`} />
-                                            <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>{receipt.store}</span>
+                                            <span className={`text-sm sm:text-base ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{receipt.store}</span>
                                         </div>
                                     )}
                                     {receipt.category && (
                                         <div className="flex items-center gap-2">
                                             <Tag className={`w-4 h-4 ${isDark ? 'text-gray-300' : 'text-gray-500'}`} />
-                                            <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>{receipt.category}</span>
-                                        </div>
-                                    )}
-                                    {receipt.createdAt && (
-                                        <div className="flex items-center gap-2 text-xs">
-                                            <Clock className={`w-4 h-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
-                                            <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>
-                                                登録日時: {new Date(receipt.createdAt.seconds * 1000).toLocaleString('ja-JP', { dateStyle: 'short', timeStyle: 'short' })}
-                                            </span>
+                                            <span className={`text-sm sm:text-base ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{receipt.category}</span>
                                         </div>
                                     )}
                                 </div>
                             </div>
-                                    ))
+                        ))
                     )}
-                                </div>
+                </div>
 
-                                {/* 戻るボタン */}
-                                <div className="mt-8 text-center">
-                                    <Link
-                                        href="/"
-                                        className="inline-block px-8 py-4 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all"
-                                    >
-                                        ← トップに戻る
-                                    </Link>
-                                </div>
-                            </div>
+                {/* 戻るボタン */}
+                <div className="mt-8 text-center">
+                    <Link
+                        href="/"
+                        className="inline-block px-8 py-4 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all"
+                    >
+                        ← トップに戻る
+                    </Link>
+                </div>
+            </div>
         </div>
-                );
+    );
 }

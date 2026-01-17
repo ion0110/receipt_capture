@@ -161,17 +161,17 @@ export default function HistoryPage() {
                 </header>
 
                 {/* サマリーカード */}
-                <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 shadow-2xl border border-white/20 mb-8">
+                <div className={isDark ? 'bg-white/10 backdrop-blur-lg rounded-3xl p-4 sm:p-6 shadow-2xl border border-white/20 mb-8' : 'bg-white rounded-3xl p-4 sm:p-6 shadow-2xl border border-gray-200 mb-8'}>
                     <div className="flex justify-between items-center">
                         <div>
-                            <p className="text-gray-300 text-sm mb-2">合計金額</p>
-                            <p className="text-4xl font-bold text-white">
+                            <p className={`text-xs sm:text-sm mb-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>合計金額</p>
+                            <p className={`text-3xl sm:text-4xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                                 ¥{totalAmount.toLocaleString()}
                             </p>
                         </div>
                         <div>
-                            <p className="text-gray-300 text-sm mb-2">登録件数</p>
-                            <p className="text-4xl font-bold text-emerald-400">
+                            <p className={`text-xs sm:text-sm mb-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>登録件数</p>
+                            <p className={`text-3xl sm:text-4xl font-bold ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>
                                 {filteredReceipts.length}
                             </p>
                         </div>
@@ -179,22 +179,22 @@ export default function HistoryPage() {
                 </div>
 
                 {/* 検索・フィルターセクション */}
-                <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 shadow-2xl border border-white/20 mb-8">
+                <div className={isDark ? 'bg-white/10 backdrop-blur-lg rounded-3xl p-4 sm:p-6 shadow-2xl border border-white/20 mb-8' : 'bg-white rounded-3xl p-4 sm:p-6 shadow-2xl border border-gray-200 mb-8'}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {/* 検索バー */}
                         <div className="relative">
-                            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                            <Search className={`absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
                             <input
                                 type="text"
                                 placeholder="店名やカテゴリで検索..."
                                 value={searchKeyword}
                                 onChange={(e) => setSearchKeyword(e.target.value)}
-                                className="w-full pl-12 pr-10 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                                className={isDark ? 'w-full pl-12 pr-10 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 focus:outline-none' : 'w-full pl-12 pr-10 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none'}
                             />
                             {searchKeyword && (
                                 <button
                                     onClick={() => setSearchKeyword('')}
-                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                                    className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${isDark ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'}`}
                                 >
                                     <X className="w-5 h-5" />
                                 </button>
@@ -205,7 +205,7 @@ export default function HistoryPage() {
                         <select
                             value={selectedCategory}
                             onChange={(e) => setSelectedCategory(e.target.value)}
-                            className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                            className={isDark ? 'w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none' : 'w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none'}
                         >
                             <option value="" className="text-gray-900">すべてのカテゴリ</option>
                             <option value="食費" className="text-gray-900">食費</option>
@@ -227,7 +227,10 @@ export default function HistoryPage() {
                     <button
                         onClick={exportToCSV}
                         disabled={receipts.length === 0}
-                        className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold py-4 px-6 rounded-xl hover:from-emerald-600 hover:to-teal-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg"
+                        className={`w-full font-bold py-3 sm:py-4 px-6 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg ${isDark
+                            ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:from-emerald-600 hover:to-teal-600'
+                            : 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:from-emerald-700 hover:to-teal-700'
+                            }`}
                     >
                         <Download className="w-5 h-5" />
                         CSVエクスポート
@@ -237,8 +240,8 @@ export default function HistoryPage() {
                 {/* 履歴リスト */}
                 <div className="space-y-4">
                     {filteredReceipts.length === 0 ? (
-                        <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-12 shadow-2xl border border-white/20 text-center">
-                            <p className="text-gray-300 text-lg">
+                        <div className={isDark ? 'bg-white/10 backdrop-blur-lg rounded-3xl p-12 shadow-2xl border border-white/20 text-center' : 'bg-white rounded-3xl p-12 shadow-2xl border border-gray-200 text-center'}>
+                            <p className={`text-base sm:text-lg ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                                 {searchKeyword || selectedCategory ? '該当する経費が見つかりません' : 'まだ経費が登録されていません'}
                             </p>
                         </div>
@@ -246,7 +249,7 @@ export default function HistoryPage() {
                         filteredReceipts.map((receipt) => (
                             <div
                                 key={receipt.id}
-                                className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/20 hover:bg-white/15 transition-all"
+                                className={isDark ? 'bg-white/10 backdrop-blur-lg rounded-2xl p-4 sm:p-6 shadow-lg border border-white/20 hover:bg-white/15 transition-all' : 'bg-white rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-200 hover:shadow-xl transition-all'}
                             >
                                 <div className="flex justify-between items-start">
                                     <div className="flex-1 space-y-3">
@@ -268,40 +271,64 @@ export default function HistoryPage() {
                                             </span>
                                         </div>
                                         {receipt.store && (
-                                            <div className="flex items-center gap-2 text-gray-300">
-                                                <Store className="w-4 h-4" />
-                                                <span>{receipt.store}</span>
-                                            </div>
-                                        )}
-                                        {receipt.category && (
-                                            <div className="flex items-center gap-2 text-gray-300">
-                                                <Tag className="w-4 h-4" />
-                                                <span>{receipt.category}</span>
-                                            </div>
-                                        )}
+                                <div className="flex justify-between items-start mb-4">
+                                    <div className="flex items-center gap-3">
+                                        <Calendar className={`w-5 h-5 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`} />
+                                        <span className={`text-base sm:text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                            {new Date(receipt.date).toLocaleDateString('ja-JP')}
+                                        </span>
                                     </div>
                                     <button
                                         onClick={() => handleDelete(receipt.id)}
-                                        className="p-3 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded-xl transition-all"
+                                        className={isDark ? 'text-red-400 hover:text-red-300 transition-colors' : 'text-red-600 hover:text-red-700 transition-colors'}
                                     >
                                         <Trash2 className="w-5 h-5" />
                                     </button>
                                 </div>
-                            </div>
-                        ))
-                    )}
-                </div>
 
-                {/* 戻るボタン */}
-                <div className="mt-8 text-center">
-                    <Link
-                        href="/"
-                        className="inline-block px-8 py-4 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all"
-                    >
-                        ← トップに戻る
-                    </Link>
-                </div>
-            </div>
+                                <div className="space-y-3">
+                                    <div className="flex items-center gap-2">
+                                        <Coins className={`w-5 h-5 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`} />
+                                        <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                            ¥{receipt.amount.toLocaleString()}
+                                        </span>
+                                    </div>
+                                    {receipt.store && (
+                                        <div className="flex items-center gap-2">
+                                            <Store className={`w-4 h-4 ${isDark ? 'text-gray-300' : 'text-gray-500'}`} />
+                                            <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>{receipt.store}</span>
+                                        </div>
+                                    )}
+                                    {receipt.category && (
+                                        <div className="flex items-center gap-2">
+                                            <Tag className={`w-4 h-4 ${isDark ? 'text-gray-300' : 'text-gray-500'}`} />
+                                            <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>{receipt.category}</span>
+                                        </div>
+                                    )}
+                                    {receipt.createdAt && (
+                                        <div className="flex items-center gap-2 text-xs">
+                                            <Clock className={`w-4 h-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
+                                            <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>
+                                                登録日時: {new Date(receipt.createdAt.seconds * 1000).toLocaleString('ja-JP', { dateStyle: 'short', timeStyle: 'short' })}
+                                            </span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                                    ))
+                    )}
+                                </div>
+
+                                {/* 戻るボタン */}
+                                <div className="mt-8 text-center">
+                                    <Link
+                                        href="/"
+                                        className="inline-block px-8 py-4 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all"
+                                    >
+                                        ← トップに戻る
+                                    </Link>
+                                </div>
+                            </div>
         </div>
-    );
+                );
 }

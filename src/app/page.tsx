@@ -165,7 +165,7 @@ export default function Home() {
         </header>
 
         {/* メインコンテンツ */}
-        <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-white/20">
+        <div className={isDark ? 'bg-white/10 backdrop-blur-lg rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/20' : 'bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-gray-200'}>
           {/* カメラ/アップロードセクション */}
           {!selectedFile && (
             <div
@@ -176,11 +176,14 @@ export default function Home() {
             >
               <label
                 htmlFor="camera-input"
-                className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-emerald-400/50 rounded-2xl cursor-pointer hover:bg-white/5 transition-all group"
+                className={`flex flex-col items-center justify-center w-full h-48 sm:h-64 border-2 border-dashed rounded-2xl cursor-pointer transition-all group ${isDark
+                  ? 'border-emerald-400/50 hover:bg-white/5'
+                  : 'border-emerald-500 hover:bg-emerald-50'
+                  }`}
               >
-                <Camera className="w-16 h-16 text-emerald-400 mb-4 group-hover:scale-110 transition-transform" />
-                <span className="text-white text-xl font-semibold">カメラで撮影</span>
-                <span className="text-gray-300 text-sm mt-2">タップして撮影開始</span>
+                <Camera className="w-12 sm:w-16 h-12 sm:h-16 text-emerald-500 mb-4 group-hover:scale-110 transition-transform" />
+                <span className={`text-lg sm:text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>カメラで撮影</span>
+                <span className={`text-xs sm:text-sm mt-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>タップして撮影開始</span>
               </label>
               <input
                 id="camera-input"
@@ -193,17 +196,19 @@ export default function Home() {
 
               <label
                 htmlFor="file-input"
-                className={`flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-2xl cursor-pointer transition-all group ${isDragging
+                className={`flex flex-col items-center justify-center w-full h-40 sm:h-48 border-2 border-dashed rounded-2xl cursor-pointer transition-all group ${isDragging
                   ? 'border-emerald-500 bg-emerald-500/20'
-                  : 'border-indigo-400/50 hover:bg-white/5'
+                  : isDark
+                    ? 'border-indigo-400/50 hover:bg-white/5'
+                    : 'border-indigo-500 hover:bg-indigo-50'
                   }`}
               >
-                <Upload className="w-12 h-12 text-indigo-400 mb-3 group-hover:scale-110 transition-transform" />
-                <span className="text-white text-lg font-semibold">
+                <Upload className={`w-10 sm:w-12 h-10 sm:h-12 mb-3 group-hover:scale-110 transition-transform ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`} />
+                <span className={`text-base sm:text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   {isDragging ? '📂 ここにドロップ' : 'ファイルから選択'}
                 </span>
                 {!isDragging && (
-                  <span className="text-gray-300 text-sm mt-2">またはドラッグ&ドロップ</span>
+                  <span className={`text-xs sm:text-sm mt-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>またはドラッグ&ドロップ</span>
                 )}
               </label>
               <input
@@ -247,7 +252,7 @@ export default function Home() {
                     setSelectedFile(null);
                     setPreviewUrl('');
                   }}
-                  className="px-6 py-4 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all"
+                  className={isDark ? 'px-6 py-4 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all' : 'px-6 py-4 bg-gray-200 text-gray-800 rounded-xl hover:bg-gray-300 transition-all'}
                 >
                   キャンセル
                 </button>
@@ -266,62 +271,62 @@ export default function Home() {
           {receiptData && (
             <div className="space-y-6">
               {saveSuccess && (
-                <div className="flex items-center gap-2 bg-emerald-500/20 border border-emerald-500/50 text-emerald-200 px-4 py-3 rounded-xl animate-pulse">
+                <div className={isDark ? 'flex items-center gap-2 bg-emerald-500/20 border border-emerald-500/50 text-emerald-200 px-4 py-3 rounded-xl animate-pulse' : 'flex items-center gap-2 bg-emerald-100 border border-emerald-300 text-emerald-800 px-4 py-3 rounded-xl animate-pulse'}>
                   <CheckCircle className="w-5 h-5" />
                   保存しました！
                 </div>
               )}
 
-              <div className="bg-white/5 p-6 rounded-2xl space-y-4">
-                <h2 className="text-2xl font-bold text-white mb-4">📝 解析結果</h2>
+              <div className={isDark ? 'bg-white/5 p-4 sm:p-6 rounded-2xl space-y-4' : 'bg-gray-50 p-4 sm:p-6 rounded-2xl space-y-4'}>
+                <h2 className={`text-xl sm:text-2xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>📝 解析結果</h2>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">日付</label>
+                    <label className={`block text-xs sm:text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>日付</label>
                     <input
                       type="date"
                       value={receiptData.date}
                       onChange={(e) => handleChange('date', e.target.value)}
-                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                      className={isDark ? 'w-full px-3 sm:px-4 py-2 sm:py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none' : 'w-full px-3 sm:px-4 py-2 sm:py-3 bg-white border border-gray-300 rounded-xl text-gray-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none'}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">時間</label>
+                    <label className={`block text-xs sm:text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>時間</label>
                     <input
                       type="time"
                       defaultValue={new Date().toTimeString().slice(0, 5)}
-                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                      className={isDark ? 'w-full px-3 sm:px-4 py-2 sm:py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none' : 'w-full px-3 sm:px-4 py-2 sm:py-3 bg-white border border-gray-300 rounded-xl text-gray-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none'}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">金額</label>
+                  <label className={`block text-xs sm:text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>金額</label>
                   <input
                     type="number"
                     value={receiptData.amount}
                     onChange={(e) => handleChange('amount', Number(e.target.value))}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                    className={isDark ? 'w-full px-3 sm:px-4 py-2 sm:py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none' : 'w-full px-3 sm:px-4 py-2 sm:py-3 bg-white border border-gray-300 rounded-xl text-gray-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none'}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">店名</label>
+                  <label className={`block text-xs sm:text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>店名</label>
                   <input
                     type="text"
                     value={receiptData.store || ''}
                     onChange={(e) => handleChange('store', e.target.value)}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                    className={isDark ? 'w-full px-3 sm:px-4 py-2 sm:py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none' : 'w-full px-3 sm:px-4 py-2 sm:py-3 bg-white border border-gray-300 rounded-xl text-gray-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none'}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">カテゴリ</label>
+                  <label className={`block text-xs sm:text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>カテゴリ</label>
                   <input
                     type="text"
                     value={receiptData.category || ''}
                     onChange={(e) => handleChange('category', e.target.value)}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                    className={isDark ? 'w-full px-3 sm:px-4 py-2 sm:py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none' : 'w-full px-3 sm:px-4 py-2 sm:py-3 bg-white border border-gray-300 rounded-xl text-gray-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none'}
                   />
                 </div>
               </div>
@@ -372,11 +377,11 @@ export default function Home() {
         <footer className="text-center mt-8 space-y-4">
           <Link
             href="/history"
-            className="inline-block bg-white/10 text-white px-6 py-3 rounded-xl hover:bg-white/20 transition-all font-semibold"
+            className={isDark ? 'inline-block bg-white/10 text-white px-6 py-3 rounded-xl hover:bg-white/20 transition-all font-semibold' : 'inline-block bg-emerald-100 text-emerald-800 px-6 py-3 rounded-xl hover:bg-emerald-200 transition-all font-semibold'}
           >
             📊 経費履歴を見る
           </Link>
-          <p className="text-gray-400 text-sm">Powered by Gemini Flash & Firebase</p>
+          <p className={`text-xs sm:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Powered by Gemini Flash & Firebase</p>
         </footer>
       </div>
     </div>

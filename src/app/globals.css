@@ -94,7 +94,7 @@ body {
   /* ページ設定 */
   @page {
     size: A4;
-    margin: 5mm;
+    margin: 3mm;
   }
 
   /* 基本設定 */
@@ -102,7 +102,7 @@ body {
   body {
     background: white !important;
     color: black !important;
-    font-size: 9px !important;
+    font-size: 8px !important;
   }
 
   /* ヘッダーを非表示 */
@@ -115,14 +115,23 @@ body {
     padding-top: 0 !important;
   }
 
+  .py-8 {
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+  }
+
   .mb-8,
   .mb-6 {
-    margin-bottom: 4px !important;
+    margin-bottom: 2px !important;
   }
 
   .p-4,
   .p-6 {
-    padding: 6px !important;
+    padding: 4px !important;
+  }
+
+  .gap-4 {
+    gap: 2px !important;
   }
 
   /* カードの背景 */
@@ -153,13 +162,13 @@ body {
 
   /* タイトルサイズ縮小 */
   h1 {
-    font-size: 16px !important;
-    margin-bottom: 4px !important;
+    font-size: 14px !important;
+    margin-bottom: 2px !important;
   }
 
   h2 {
-    font-size: 12px !important;
-    margin-bottom: 4px !important;
+    font-size: 10px !important;
+    margin-bottom: 2px !important;
   }
 
   /* ボタンを非表示 */
@@ -174,21 +183,34 @@ body {
 
   /* 円グラフを小さく */
   .max-w-sm {
-    max-width: 120px !important;
+    max-width: 80px !important;
   }
 
   /* グラフ高さを縮小 */
+  .print-section-2 {
+    max-height: 120px !important;
+  }
+
   .print-section-2 svg {
-    max-height: 100px !important;
+    max-height: 70px !important;
+  }
+
+  /* サマリーカードを小さく */
+  .grid.grid-cols-2 {
+    gap: 2px !important;
+  }
+
+  .rounded-2xl {
+    padding: 3px !important;
   }
 
   /* 全体を縮小して1ページに収める */
   .min-h-screen {
     min-height: auto !important;
-    transform: scale(0.65);
+    transform: scale(0.80);
     transform-origin: top center;
-    width: 154%;
-    margin-left: -27%;
+    width: 125%;
+    margin-left: -12.5%;
   }
 
   /* 各セクションは分割しない */
@@ -196,7 +218,7 @@ body {
   .rounded-2xl {
     page-break-inside: avoid;
     break-inside: avoid;
-    margin-bottom: 4px !important;
+    margin-bottom: 2px !important;
   }
 
   /* SVGとグラフの色を保持 */

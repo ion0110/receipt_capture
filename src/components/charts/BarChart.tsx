@@ -21,14 +21,14 @@ export default function BarChart({ data, isDark }: BarChartProps) {
     return (
         <div className="w-full overflow-x-auto">
             <div className="min-w-full" style={{ minWidth: `${displayData.length * 40}px` }}>
-                <div className="flex items-end justify-between gap-1 h-48 sm:h-64 px-2">
+                <div className="flex items-end justify-between gap-1 h-40 sm:h-48 px-2">
                     {displayData.map((item, index) => {
                         const heightPercentage = (item.value / maxValue) * 100;
                         return (
                             <div key={index} className="flex-1 flex flex-col items-center gap-1 sm:gap-2 min-w-0">
                                 {/* 金額表示 */}
                                 {item.value > 0 && (
-                                    <div className={`text-[10px] sm:text-xs font-semibold truncate w-full text-center ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    <div className={`text-[9px] sm:text-xs font-semibold truncate w-full text-center ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                                         ¥{item.value.toLocaleString()}
                                     </div>
                                 )}
@@ -40,7 +40,7 @@ export default function BarChart({ data, isDark }: BarChartProps) {
                                     />
                                 </div>
                                 {/* ラベル */}
-                                <div className={`text-[10px] sm:text-xs font-medium truncate w-full text-center ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                <div className={`text-[9px] sm:text-xs font-medium truncate w-full text-center ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                                     {item.label}
                                 </div>
                             </div>

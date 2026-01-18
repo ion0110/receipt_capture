@@ -14,7 +14,7 @@ export default function LineChart({ data, isDark }: LineChartProps) {
     const maxValue = Math.max(...data.map(d => d.value), 1);
     const padding = 10;
     const width = 100 - padding * 2;
-    const height = 60;
+    const height = 50; // 高さを小さく
 
     // ポイントを計算
     const points = data.map((item, index) => {
@@ -35,14 +35,14 @@ export default function LineChart({ data, isDark }: LineChartProps) {
     const areaPath = `${linePath} L ${points[points.length - 1].x} ${padding + height} L ${points[0].x} ${padding + height} Z`;
 
     // ラベル表示用のデータを間引く
-    const labelStep = Math.ceil(data.length / 8);
+    const labelStep = Math.ceil(data.length / 6); // さらに間引く
     const displayLabels = data.filter((_, i) => i % labelStep === 0);
 
     return (
         <div className="w-full">
-            <svg viewBox="0 0 100 80" className="w-full h-auto" style={{ minHeight: '200px' }}>
+            <svg viewBox="0 0 100 70" className="w-full h-auto" style={{ maxHeight: '150px' }}>
                 {/* グリッド線 */}
-                {[0, 25, 50, 75, 100].map((percent) => {
+                {[0, 50, 100].map((percent) => {
                     const y = padding + height - (height * percent) / 100;
                     return (
                         <line
@@ -52,7 +52,7 @@ export default function LineChart({ data, isDark }: LineChartProps) {
                             x2={100 - padding}
                             y2={y}
                             stroke={isDark ? '#374151' : '#e5e7eb'}
-                            strokeWidth="0.2"
+                            strokeWidth="0.3"
                         />
                     );
                 })}
@@ -74,39 +74,28 @@ export default function LineChart({ data, isDark }: LineChartProps) {
                     d={linePath}
                     fill="none"
                     stroke="#10b981"
-                    strokeWidth="0.5"
+                    strokeWidth="0.8"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                 />
 
                 {/* ポイント */}
                 {points.map((point, index) => (
-                    <g key={index}>
-                        <circle
-                            cx={point.x}
-                            cy={point.y}
-                            r="1"
-                            fill="#10b981"
-                            className="transition-all hover:r-1.5 cursor-pointer"
-                        />
-                        {point.value > 0 && index % labelStep === 0 && (
-                            <text
-                                x={point.x}
-                                y={point.y - 2}
-                                textAnchor="middle"
-                                className={`text-[2px] font-semibold ${isDark ? 'fill-gray-300' : 'fill-gray-700'}`}
-                            >
-                                ¥{point.value.toLocaleString()}
-                            </text>
-                        )}
-                    </g>
+                    <circle
+                        key={index}
+                        cx={point.x}
+                        cy={point.y}
+                        r="1.2"
+                        fill="#10b981"
+                        className="transition-all"
+                    />
                 ))}
             </svg>
 
             {/* X軸ラベル */}
-            <div className="flex justify-between mt-2 px-2">
+            <div className="flex justify-between mt-1 px-1">
                 {displayLabels.map((item, index) => (
-                    <span key={index} className={`text-[10px] sm:text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    <span key={index} className={`text-[9px] sm:text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                         {item.label}
                     </span>
                 ))}

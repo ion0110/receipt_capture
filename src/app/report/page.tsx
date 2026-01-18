@@ -356,7 +356,7 @@ export default function ReportPage() {
 
                 {/* カテゴリ別集計 */}
                 {categoryData.length > 0 && (
-                    <div className={isDark ? 'bg-white/10 backdrop-blur-lg rounded-3xl p-4 sm:p-6 shadow-2xl border border-white/20 mb-8' : 'bg-white rounded-3xl p-4 sm:p-6 shadow-2xl border border-gray-200 mb-8'}>
+                    <div className={`print-section-1 ${isDark ? 'bg-white/10 backdrop-blur-lg rounded-3xl p-4 sm:p-6 shadow-2xl border border-white/20 mb-8' : 'bg-white rounded-3xl p-4 sm:p-6 shadow-2xl border border-gray-200 mb-8'}`}>
                         <h2 className={`text-xl sm:text-2xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>カテゴリ別集計</h2>
 
                         {/* 円グラフ */}
@@ -390,7 +390,7 @@ export default function ReportPage() {
 
                 {/* 時系列推移グラフ */}
                 {timeSeriesData.length > 0 && (
-                    <div className={isDark ? 'bg-white/10 backdrop-blur-lg rounded-3xl p-4 sm:p-6 shadow-2xl border border-white/20 mb-8' : 'bg-white rounded-3xl p-4 sm:p-6 shadow-2xl border border-gray-200 mb-8'}>
+                    <div className={`print-section-2 ${isDark ? 'bg-white/10 backdrop-blur-lg rounded-3xl p-4 sm:p-6 shadow-2xl border border-white/20 mb-8' : 'bg-white rounded-3xl p-4 sm:p-6 shadow-2xl border border-gray-200 mb-8'}`}>
                         <h2 className={`text-xl sm:text-2xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                             {reportType === 'monthly' ? '日別推移' : '月別推移'}
                         </h2>

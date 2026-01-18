@@ -13,62 +13,72 @@ export default function BarChart({ data, isDark }: BarChartProps) {
 
     const maxValue = Math.max(...data.map(d => d.value), 1);
 
-    // データが多い場合は間引く
-    const step = data.length > 15 ? Math.ceil(data.length / 15) : 1;
+    // データが多い場合は間引く（最大20件に）
+    const maxItems = 20;
+    const step = data.length > maxItems ? Math.ceil(data.length / maxItems) : 1;
     const displayData = data.filter((_, i) => i % step === 0);
 
+    // バーの幅を計算
+    const barWidth = Math.max(100 / displayData.length - 1, 3);
+
     return (
-        <div className="w-full overflow-x-auto">
+        <div className="w-full">
+            {/* バーチャート */}
             <div
-                className="flex items-end gap-1"
-                style={{
-                    height: '220px',
-                    minWidth: displayData.length > 12 ? `${displayData.length * 40}px` : 'auto'
-                }}
+                className="flex items-end justify-around gap-px"
+                style={{ height: '180px' }}
             >
                 {displayData.map((item, index) => {
-                    const barHeight = maxValue > 0 ? Math.max((item.value / maxValue) * 160, item.value > 0 ? 4 : 0) : 0;
+                    const heightPercent = maxValue > 0 ? (item.value / maxValue) * 100 : 0;
 
                     return (
                         <div
                             key={index}
-                            className="flex flex-col items-center flex-1"
-                            style={{ minWidth: '28px' }}
+                            className="flex flex-col items-center"
+                            style={{ width: `${barWidth}%` }}
                         >
-                            {/* 金額 */}
-                            <div
-                                className={`text-xs font-semibold mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}
-                                style={{ height: '20px', fontSize: '9px' }}
-                            >
-                                {item.value > 0 ? `¥${item.value.toLocaleString()}` : ''}
-                            </div>
-
-                            {/* バーエリア */}
-                            <div
-                                className="flex items-end justify-center w-full"
-                                style={{ height: '160px' }}
-                            >
-                                {/* バー */}
+                            {/* 金額ラベル */}
+                            {item.value > 0 && (
                                 <div
-                                    className="w-4/5 rounded-t"
+                                    className={`text-center mb-1 truncate w-full ${isDark ? 'text-gray-300' : 'text-gray-700'}`}
+                                    style={{ fontSize: '8px', height: '14px' }}
+                                >
+                                    ¥{item.value.toLocaleString()}
+                                </div>
+                            )}
+                            {item.value === 0 && <div style={{ height: '14px' }} />}
+
+                            {/* バー */}
+                            <div
+                                className="w-full flex items-end justify-center"
+                                style={{ height: '140px' }}
+                            >
+                                <div
+                                    className="rounded-t"
                                     style={{
-                                        height: `${barHeight}px`,
-                                        background: 'linear-gradient(to top, #059669, #10b981, #34d399)',
-                                        minWidth: '8px'
+                                        width: '80%',
+                                        height: `${Math.max(heightPercent, item.value > 0 ? 2 : 0)}%`,
+                                        background: item.value > 0 ? 'linear-gradient(to top, #059669, #10b981)' : 'transparent',
+                                        minHeight: item.value > 0 ? '3px' : '0'
                                     }}
                                 />
-                            </div>
-
-                            {/* ラベル */}
-                            <div
-                                className={`text-xs mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
-                                style={{ fontSize: '9px' }}
-                            >
-                                {item.label}
                             </div>
                         </div>
                     );
                 })}
+            </div>
+
+            {/* X軸ラベル */}
+            <div className="flex justify-around mt-1">
+                {displayData.map((item, index) => (
+                    <div
+                        key={index}
+                        className={`text-center truncate ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+                        style={{ width: `${barWidth}%`, fontSize: '9px' }}
+                    >
+                        {item.label}
+                    </div>
+                ))}
             </div>
         </div>
     );

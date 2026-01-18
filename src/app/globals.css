@@ -94,7 +94,7 @@ body {
   /* ページ設定 */
   @page {
     size: A4;
-    margin: 15mm;
+    margin: 10mm;
   }
 
   /* 基本設定 */
@@ -102,7 +102,7 @@ body {
   body {
     background: white !important;
     color: black !important;
-    font-size: 12px !important;
+    font-size: 11px !important;
   }
 
   /* ヘッダーを非表示 */
@@ -115,13 +115,22 @@ body {
     padding-top: 0 !important;
   }
 
+  .mb-8 {
+    margin-bottom: 8px !important;
+  }
+
+  .p-4,
+  .sm\\:p-6 {
+    padding: 8px !important;
+  }
+
   /* カードの背景 */
   .bg-white\/10,
   .backdrop-blur-lg,
   .backdrop-blur-md {
     background: white !important;
     backdrop-filter: none !important;
-    border: 1px solid #ddd !important;
+    border: 1px solid #ccc !important;
   }
 
   /* グラデーション背景を削除 */
@@ -151,32 +160,26 @@ body {
     display: none !important;
   }
 
-  /* カテゴリ別集計の後でページ区切り */
-  .rounded-3xl:first-of-type {
+  /* カテゴリ別集計（1ページ目） */
+  .print-section-1 {
     page-break-after: always;
   }
 
-  /* グラフセクションは次のページから */
-  .rounded-3xl:nth-of-type(2) {
+  /* 時系列グラフ（2ページ目） */
+  .print-section-2 {
     page-break-before: always;
   }
 
   /* 各セクションは分割しない */
-  .rounded-3xl {
+  .rounded-3xl,
+  .rounded-2xl {
     page-break-inside: avoid;
     break-inside: avoid;
   }
 
-  /* SVGグラフの色を保持 */
-  svg {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  svg rect,
-  svg path,
-  svg circle,
-  svg line {
+  /* SVGとグラフの色を保持 */
+  svg,
+  svg * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }

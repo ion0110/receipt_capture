@@ -94,7 +94,7 @@ body {
   /* ページ設定 */
   @page {
     size: A4;
-    margin: 10mm;
+    margin: 15mm;
   }
 
   /* 基本設定 */
@@ -102,6 +102,7 @@ body {
   body {
     background: white !important;
     color: black !important;
+    font-size: 12px !important;
   }
 
   /* ヘッダーを非表示 */
@@ -120,7 +121,7 @@ body {
   .backdrop-blur-md {
     background: white !important;
     backdrop-filter: none !important;
-    border: 1px solid #ccc !important;
+    border: 1px solid #ddd !important;
   }
 
   /* グラデーション背景を削除 */
@@ -148,5 +149,35 @@ body {
   /* 戻るリンクを非表示 */
   a[href="/history"] {
     display: none !important;
+  }
+
+  /* カテゴリ別集計の後でページ区切り */
+  .rounded-3xl:first-of-type {
+    page-break-after: always;
+  }
+
+  /* グラフセクションは次のページから */
+  .rounded-3xl:nth-of-type(2) {
+    page-break-before: always;
+  }
+
+  /* 各セクションは分割しない */
+  .rounded-3xl {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* SVGグラフの色を保持 */
+  svg {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  svg rect,
+  svg path,
+  svg circle,
+  svg line {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 }

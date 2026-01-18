@@ -13,72 +13,72 @@ export default function BarChart({ data, isDark }: BarChartProps) {
 
     const maxValue = Math.max(...data.map(d => d.value), 1);
 
-    // データが多い場合は間引く（最大20件に）
-    const maxItems = 20;
-    const step = data.length > maxItems ? Math.ceil(data.length / maxItems) : 1;
-    const displayData = data.filter((_, i) => i % step === 0);
+    // 表示用データ（間引きなし、全て表示）
+    const displayData = data;
 
-    // バーの幅を計算
-    const barWidth = Math.max(100 / displayData.length - 1, 3);
+    // 棒の数に応じた幅を計算
+    const barCount = displayData.length;
 
     return (
-        <div className="w-full">
-            {/* バーチャート */}
+        <div className="w-full overflow-x-auto">
             <div
-                className="flex items-end justify-around gap-px"
-                style={{ height: '180px' }}
+                className="flex items-end"
+                style={{
+                    height: '200px',
+                    minWidth: barCount > 15 ? `${barCount * 25}px` : '100%'
+                }}
             >
                 {displayData.map((item, index) => {
-                    const heightPercent = maxValue > 0 ? (item.value / maxValue) * 100 : 0;
+                    // 高さをピクセルで計算（最大150px）
+                    const barHeightPx = maxValue > 0 ? Math.round((item.value / maxValue) * 150) : 0;
 
                     return (
                         <div
                             key={index}
-                            className="flex flex-col items-center"
-                            style={{ width: `${barWidth}%` }}
+                            className="flex flex-col items-center justify-end flex-1"
+                            style={{ minWidth: '20px', height: '100%' }}
                         >
-                            {/* 金額ラベル */}
-                            {item.value > 0 && (
-                                <div
-                                    className={`text-center mb-1 truncate w-full ${isDark ? 'text-gray-300' : 'text-gray-700'}`}
-                                    style={{ fontSize: '8px', height: '14px' }}
-                                >
-                                    ¥{item.value.toLocaleString()}
-                                </div>
-                            )}
-                            {item.value === 0 && <div style={{ height: '14px' }} />}
+                            {/* 金額ラベル（値がある場合のみ） */}
+                            <div
+                                style={{
+                                    height: '25px',
+                                    fontSize: '7px',
+                                    display: 'flex',
+                                    alignItems: 'flex-end',
+                                    justifyContent: 'center'
+                                }}
+                                className={isDark ? 'text-gray-300' : 'text-gray-700'}
+                            >
+                                {item.value > 0 && `¥${item.value.toLocaleString()}`}
+                            </div>
 
                             {/* バー */}
                             <div
-                                className="w-full flex items-end justify-center"
-                                style={{ height: '140px' }}
+                                style={{
+                                    width: '70%',
+                                    height: item.value > 0 ? `${Math.max(barHeightPx, 4)}px` : '0px',
+                                    background: item.value > 0 ? 'linear-gradient(to top, #059669, #34d399)' : 'transparent',
+                                    borderRadius: '3px 3px 0 0',
+                                    transition: 'height 0.3s ease'
+                                }}
+                            />
+
+                            {/* ラベル */}
+                            <div
+                                style={{
+                                    height: '20px',
+                                    fontSize: '8px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}
+                                className={isDark ? 'text-gray-400' : 'text-gray-600'}
                             >
-                                <div
-                                    className="rounded-t"
-                                    style={{
-                                        width: '80%',
-                                        height: `${Math.max(heightPercent, item.value > 0 ? 2 : 0)}%`,
-                                        background: item.value > 0 ? 'linear-gradient(to top, #059669, #10b981)' : 'transparent',
-                                        minHeight: item.value > 0 ? '3px' : '0'
-                                    }}
-                                />
+                                {item.label.replace('日', '').replace('月', '')}
                             </div>
                         </div>
                     );
                 })}
-            </div>
-
-            {/* X軸ラベル */}
-            <div className="flex justify-around mt-1">
-                {displayData.map((item, index) => (
-                    <div
-                        key={index}
-                        className={`text-center truncate ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
-                        style={{ width: `${barWidth}%`, fontSize: '9px' }}
-                    >
-                        {item.label}
-                    </div>
-                ))}
             </div>
         </div>
     );

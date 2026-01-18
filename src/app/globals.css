@@ -30,6 +30,7 @@ body {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -40,6 +41,7 @@ body {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -47,9 +49,12 @@ body {
 }
 
 @keyframes pulseGlow {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.5;
   }
@@ -60,6 +65,7 @@ body {
     opacity: 0;
     transform: scale(0.9);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -80,4 +86,84 @@ body {
 
 .animate-scaleIn {
   animation: scaleIn 0.4s ease-out;
+}
+
+/* 印刷用スタイル */
+@media print {
+
+  /* ページ設定 */
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+
+  /* 全体を1ページに収める */
+  html,
+  body {
+    height: auto !important;
+    overflow: visible !important;
+    background: white !important;
+    color: black !important;
+    font-size: 10px !important;
+  }
+
+  /* ヘッダーを非表示 */
+  header.fixed {
+    display: none !important;
+  }
+
+  /* 余白調整 */
+  .pt-16 {
+    padding-top: 0 !important;
+  }
+
+  /* コンテナ調整 */
+  .container {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  /* カードの背景 */
+  .bg-white\/10,
+  .backdrop-blur-lg {
+    background: white !important;
+    backdrop-filter: none !important;
+  }
+
+  /* ボタンを非表示 */
+  button,
+  .flex.gap-4.mb-8 {
+    display: none !important;
+  }
+
+  /* グラフのサイズ調整 */
+  .rounded-3xl {
+    page-break-inside: avoid;
+    margin-bottom: 10px !important;
+    padding: 10px !important;
+    border: 1px solid #ddd !important;
+  }
+
+  /* テキスト色 */
+  h1,
+  h2,
+  h3,
+  p,
+  span,
+  div {
+    color: black !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* グラデーション背景を削除 */
+  .bg-gradient-to-br {
+    background: white !important;
+  }
+
+  /* 縮小して1ページに収める */
+  .max-w-6xl {
+    transform: scale(0.85);
+    transform-origin: top center;
+  }
 }

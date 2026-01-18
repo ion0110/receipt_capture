@@ -94,7 +94,7 @@ body {
   /* ページ設定 */
   @page {
     size: A4;
-    margin: 10mm;
+    margin: 5mm;
   }
 
   /* 基本設定 */
@@ -102,7 +102,7 @@ body {
   body {
     background: white !important;
     color: black !important;
-    font-size: 11px !important;
+    font-size: 9px !important;
   }
 
   /* ヘッダーを非表示 */
@@ -115,8 +115,14 @@ body {
     padding-top: 0 !important;
   }
 
-  .mb-8 {
-    margin-bottom: 8px !important;
+  .mb-8,
+  .mb-6 {
+    margin-bottom: 4px !important;
+  }
+
+  .p-4,
+  .p-6 {
+    padding: 6px !important;
   }
 
   /* カードの背景 */
@@ -145,6 +151,17 @@ body {
     print-color-adjust: exact !important;
   }
 
+  /* タイトルサイズ縮小 */
+  h1 {
+    font-size: 16px !important;
+    margin-bottom: 4px !important;
+  }
+
+  h2 {
+    font-size: 12px !important;
+    margin-bottom: 4px !important;
+  }
+
   /* ボタンを非表示 */
   button {
     display: none !important;
@@ -155,14 +172,21 @@ body {
     display: none !important;
   }
 
-  /* カテゴリ別集計（1ページ目） */
-  .print-section-1 {
-    page-break-after: always;
+  /* 円グラフを小さく */
+  .max-w-sm {
+    max-width: 120px !important;
   }
 
-  /* 時系列グラフ（2ページ目） */
-  .print-section-2 {
-    page-break-before: always;
+  /* グラフ高さを縮小 */
+  .print-section-2 svg {
+    max-height: 100px !important;
+  }
+
+  /* 全体を縮小して1ページに収める */
+  .min-h-screen {
+    min-height: auto !important;
+    transform: scale(0.70);
+    transform-origin: top center;
   }
 
   /* 各セクションは分割しない */
@@ -170,6 +194,7 @@ body {
   .rounded-2xl {
     page-break-inside: avoid;
     break-inside: avoid;
+    margin-bottom: 4px !important;
   }
 
   /* SVGとグラフの色を保持 */

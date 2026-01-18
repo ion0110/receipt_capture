@@ -185,10 +185,10 @@ body {
   /* 全体を縮小して1ページに収める */
   .min-h-screen {
     min-height: auto !important;
-    transform: scale(0.80);
+    transform: scale(0.65);
     transform-origin: top center;
-    width: 125%;
-    margin-left: -12.5%;
+    width: 154%;
+    margin-left: -27%;
   }
 
   /* 各セクションは分割しない */

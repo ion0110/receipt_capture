@@ -94,7 +94,7 @@ body {
   /* ページ設定 */
   @page {
     size: A4;
-    margin: 10mm;
+    margin: 5mm;
   }
 
   /* 全体を1ページに収める */
@@ -104,11 +104,12 @@ body {
     overflow: visible !important;
     background: white !important;
     color: black !important;
-    font-size: 10px !important;
+    font-size: 8px !important;
   }
 
   /* ヘッダーを非表示 */
-  header.fixed {
+  header.fixed,
+  header {
     display: none !important;
   }
 
@@ -117,31 +118,65 @@ body {
     padding-top: 0 !important;
   }
 
+  .py-8 {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+  }
+
+  .mb-8 {
+    margin-bottom: 5px !important;
+  }
+
   /* コンテナ調整 */
   .container {
     max-width: 100% !important;
-    padding: 0 !important;
+    padding: 0 5px !important;
+  }
+
+  .max-w-6xl {
+    max-width: 100% !important;
   }
 
   /* カードの背景 */
   .bg-white\/10,
-  .backdrop-blur-lg {
+  .backdrop-blur-lg,
+  .backdrop-blur-md {
     background: white !important;
     backdrop-filter: none !important;
   }
 
   /* ボタンを非表示 */
-  button,
-  .flex.gap-4.mb-8 {
+  button {
+    display: none !important;
+  }
+
+  /* タブ切り替えを非表示 */
+  .flex.gap-4.mb-6 {
+    display: none !important;
+  }
+
+  /* 戻るリンクを非表示 */
+  .text-center:last-child {
     display: none !important;
   }
 
   /* グラフのサイズ調整 */
   .rounded-3xl {
     page-break-inside: avoid;
-    margin-bottom: 10px !important;
-    padding: 10px !important;
+    break-inside: avoid;
+    margin-bottom: 5px !important;
+    padding: 5px !important;
     border: 1px solid #ddd !important;
+    border-radius: 8px !important;
+  }
+
+  /* サマリーカード */
+  .grid.grid-cols-2 {
+    gap: 5px !important;
+  }
+
+  .rounded-2xl {
+    padding: 5px !important;
   }
 
   /* テキスト色 */
@@ -156,14 +191,42 @@ body {
     print-color-adjust: exact !important;
   }
 
+  /* タイトルサイズ縮小 */
+  h1 {
+    font-size: 18px !important;
+    margin-bottom: 5px !important;
+  }
+
+  h2 {
+    font-size: 14px !important;
+    margin-bottom: 5px !important;
+  }
+
   /* グラデーション背景を削除 */
   .bg-gradient-to-br {
     background: white !important;
   }
 
-  /* 縮小して1ページに収める */
-  .max-w-6xl {
-    transform: scale(0.85);
-    transform-origin: top center;
+  /* 円グラフを小さく */
+  .max-w-sm {
+    max-width: 150px !important;
+  }
+
+  /* 棒グラフを小さく */
+  .h-40 {
+    height: 100px !important;
+  }
+
+  /* 折れ線グラフを小さく */
+  svg {
+    max-height: 80px !important;
+  }
+
+  /* 全体を縮小 */
+  .min-h-screen {
+    min-height: auto !important;
+    transform: scale(0.65);
+    transform-origin: top left;
+    width: 154%;
   }
 }

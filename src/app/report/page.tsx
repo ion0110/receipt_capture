@@ -451,17 +451,6 @@ export default function ReportPage() {
                         印刷
                     </button>
                 </div>
-
-                {/* 戻るボタン */}
-                <div className="text-center">
-                    <Link
-                        href="/history"
-                        className={isDark ? 'inline-flex items-center gap-2 px-6 py-3 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all font-semibold' : 'inline-flex items-center gap-2 px-6 py-3 bg-gray-200 text-gray-800 rounded-xl hover:bg-gray-300 transition-all font-semibold'}
-                    >
-                        <ArrowLeft className="w-4 h-4" />
-                        履歴に戻る
-                    </Link>
-                </div>
             </div>
         </div>
     );

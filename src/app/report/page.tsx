@@ -8,6 +8,9 @@ import { db, signOut } from '@/lib/firebase';
 import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
 import { useAuth } from '@/contexts/auth-context';
 import { useTheme } from '@/contexts/theme-context';
+import PieChart from '@/components/charts/PieChart';
+import BarChart from '@/components/charts/BarChart';
+import LineChart from '@/components/charts/LineChart';
 
 interface Receipt {
     id: string;
@@ -293,10 +296,10 @@ export default function ReportPage() {
                             <button
                                 onClick={() => setReportType('monthly')}
                                 className={`flex-1 py-3 px-4 rounded-xl font-semibold transition-all ${reportType === 'monthly'
-                                        ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white'
-                                        : isDark
-                                            ? 'bg-white/10 text-gray-300 hover:bg-white/20'
-                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white'
+                                    : isDark
+                                        ? 'bg-white/10 text-gray-300 hover:bg-white/20'
+                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                     }`}
                             >
                                 月次レポート
@@ -304,10 +307,10 @@ export default function ReportPage() {
                             <button
                                 onClick={() => setReportType('yearly')}
                                 className={`flex-1 py-3 px-4 rounded-xl font-semibold transition-all ${reportType === 'yearly'
-                                        ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white'
-                                        : isDark
-                                            ? 'bg-white/10 text-gray-300 hover:bg-white/20'
-                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white'
+                                    : isDark
+                                        ? 'bg-white/10 text-gray-300 hover:bg-white/20'
+                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                     }`}
                             >
                                 年次レポート
@@ -374,10 +377,17 @@ export default function ReportPage() {
                     </div>
                 </div>
 
-                {/* カテゴリ別集計テーブル */}
+                {/* カテゴリ別集計 */}
                 {categoryData.length > 0 && (
                     <div className={isDark ? 'bg-white/10 backdrop-blur-lg rounded-3xl p-4 sm:p-6 shadow-2xl border border-white/20 mb-8' : 'bg-white rounded-3xl p-4 sm:p-6 shadow-2xl border border-gray-200 mb-8'}>
-                        <h2 className={`text-xl sm:text-2xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>カテゴリ別集計</h2>
+                        <h2 className={`text-xl sm:text-2xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>カテゴリ別集計</h2>
+
+                        {/* 円グラフ */}
+                        <div className="mb-8">
+                            <PieChart data={categoryData} isDark={isDark} />
+                        </div>
+
+                        {/* プログレスバー表示 */}
                         <div className="space-y-3">
                             {categoryData.map((item, index) => (
                                 <div key={index} className="flex items-center gap-3">
@@ -397,6 +407,36 @@ export default function ReportPage() {
                                     </div>
                                 </div>
                             ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* 時系列推移グラフ */}
+                {timeSeriesData.length > 0 && (
+                    <div className={isDark ? 'bg-white/10 backdrop-blur-lg rounded-3xl p-4 sm:p-6 shadow-2xl border border-white/20 mb-8' : 'bg-white rounded-3xl p-4 sm:p-6 shadow-2xl border border-gray-200 mb-8'}>
+                        <h2 className={`text-xl sm:text-2xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                            {reportType === 'monthly' ? '日別推移' : '月別推移'}
+                        </h2>
+
+                        {/* タブ切り替え */}
+                        <div className="flex gap-4 mb-6">
+                            <button className="flex-1 py-2 px-4 rounded-xl font-semibold bg-gradient-to-r from-emerald-500 to-teal-500 text-white">
+                                棒グラフ
+                            </button>
+                            <button className={`flex-1 py-2 px-4 rounded-xl font-semibold ${isDark ? 'bg-white/10 text-gray-300' : 'bg-gray-100 text-gray-700'}`}>
+                                折れ線グラフ
+                            </button>
+                        </div>
+
+                        {/* 棒グラフ */}
+                        <div className="mb-4">
+                            <BarChart data={timeSeriesData} isDark={isDark} />
+                        </div>
+
+                        {/* 折れ線グラフ */}
+                        <div className="mt-8">
+                            <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>推移グラフ</h3>
+                            <LineChart data={timeSeriesData} isDark={isDark} />
                         </div>
                     </div>
                 )}

@@ -375,12 +375,20 @@ export default function Home() {
 
         {/* フッター */}
         <footer className="text-center mt-8 space-y-4">
-          <Link
-            href="/history"
-            className={isDark ? 'inline-block bg-white/10 text-white px-6 py-3 rounded-xl hover:bg-white/20 transition-all font-semibold' : 'inline-block bg-emerald-100 text-emerald-800 px-6 py-3 rounded-xl hover:bg-emerald-200 transition-all font-semibold'}
-          >
-            📊 経費履歴を見る
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link
+              href="/history"
+              className={isDark ? 'inline-block bg-white/10 text-white px-6 py-3 rounded-xl hover:bg-white/20 transition-all font-semibold' : 'inline-block bg-emerald-100 text-emerald-800 px-6 py-3 rounded-xl hover:bg-emerald-200 transition-all font-semibold'}
+            >
+              📊 経費履歴を見る
+            </Link>
+            <Link
+              href="/report"
+              className={isDark ? 'inline-block bg-white/10 text-white px-6 py-3 rounded-xl hover:bg-white/20 transition-all font-semibold' : 'inline-block bg-indigo-100 text-indigo-800 px-6 py-3 rounded-xl hover:bg-indigo-200 transition-all font-semibold'}
+            >
+              📈 レポートを見る
+            </Link>
+          </div>
           <p className={`text-xs sm:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Powered by Gemini Flash & Firebase</p>
         </footer>
       </div>

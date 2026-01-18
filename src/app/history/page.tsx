@@ -292,12 +292,18 @@ export default function HistoryPage() {
                 </div>
 
                 {/* 戻るボタン */}
-                <div className="mt-8 text-center">
+                <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
                     <Link
                         href="/"
-                        className="inline-block px-8 py-4 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all"
+                        className={isDark ? 'inline-block px-8 py-4 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all' : 'inline-block px-8 py-4 bg-gray-200 text-gray-800 rounded-xl hover:bg-gray-300 transition-all'}
                     >
                         ← トップに戻る
+                    </Link>
+                    <Link
+                        href="/report"
+                        className={isDark ? 'inline-block px-8 py-4 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all' : 'inline-block px-8 py-4 bg-indigo-100 text-indigo-800 rounded-xl hover:bg-indigo-200 transition-all'}
+                    >
+                        📈 レポートを見る
                     </Link>
                 </div>
             </div>

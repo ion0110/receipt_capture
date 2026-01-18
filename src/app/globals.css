@@ -119,11 +119,6 @@ body {
     margin-bottom: 8px !important;
   }
 
-  .p-4,
-  .sm\\:p-6 {
-    padding: 8px !important;
-  }
-
   /* カードの背景 */
   .bg-white\/10,
   .backdrop-blur-lg,

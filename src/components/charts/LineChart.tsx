@@ -11,111 +11,72 @@ interface LineChartProps {
 export default function LineChart({ data, isDark }: LineChartProps) {
     if (data.length === 0) return null;
 
-    // 値のあるデータのみを抽出
-    const hasData = data.some(d => d.value > 0);
-    if (!hasData) {
-        return (
-            <div className={`text-center py-8 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                この期間のデータはありません
-            </div>
-        );
-    }
-
     const maxValue = Math.max(...data.map(d => d.value), 1);
 
-    // SVG設定
-    const svgWidth = 100;
-    const svgHeight = 50;
-    const padding = { top: 5, bottom: 8, left: 5, right: 5 };
-    const chartWidth = svgWidth - padding.left - padding.right;
-    const chartHeight = svgHeight - padding.top - padding.bottom;
+    // データが多い場合は間引いて表示（最大15件）
+    const step = Math.ceil(data.length / 15);
+    const displayData = data.filter((_, i) => i % step === 0);
 
-    // ポイントを計算
-    const points = data.map((item, index) => {
-        const x = padding.left + (chartWidth / (data.length - 1 || 1)) * index;
-        const y = padding.top + chartHeight - (item.value / maxValue) * chartHeight;
+    const chartHeight = 180;
+    const chartWidth = 100;
+
+    // ポイント座標を計算
+    const points = displayData.map((item, index) => {
+        const x = (index / (displayData.length - 1 || 1)) * chartWidth;
+        const y = chartHeight - (item.value / maxValue) * chartHeight;
         return { x, y, value: item.value, label: item.label };
     });
 
     // SVGパスを生成
-    const linePath = points.map((point, index) => {
-        return `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`;
-    }).join(' ');
+    const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
 
-    // エリアパスを生成
-    const areaPath = `${linePath} L ${points[points.length - 1].x} ${padding.top + chartHeight} L ${points[0].x} ${padding.top + chartHeight} Z`;
-
-    // ラベル表示用のデータを間引く（最大8件）
-    const labelStep = Math.ceil(data.length / 8);
-    const displayLabels = data.filter((_, i) => i % labelStep === 0);
+    // エリアパス
+    const areaPath = points.length > 0
+        ? `${linePath} L ${points[points.length - 1].x} ${chartHeight} L 0 ${chartHeight} Z`
+        : '';
 
     return (
-        <div className="w-full">
+        <div style={{ width: '100%' }}>
             <svg
-                viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-                className="w-full"
-                style={{ height: '180px', maxHeight: '220px' }}
-                preserveAspectRatio="xMidYMid meet"
+                width="100%"
+                height="200px"
+                viewBox={`0 0 ${chartWidth} ${chartHeight}`}
+                preserveAspectRatio="none"
+                style={{ display: 'block' }}
             >
                 {/* グリッド線 */}
-                {[0, 50, 100].map((percent) => {
-                    const y = padding.top + chartHeight - (chartHeight * percent) / 100;
-                    return (
-                        <line
-                            key={percent}
-                            x1={padding.left}
-                            y1={y}
-                            x2={svgWidth - padding.right}
-                            y2={y}
-                            stroke={isDark ? '#374151' : '#e5e7eb'}
-                            strokeWidth="0.15"
-                            strokeDasharray="0.5,0.5"
-                        />
-                    );
-                })}
+                <line x1="0" y1="0" x2={chartWidth} y2="0" stroke={isDark ? '#374151' : '#e5e7eb'} strokeWidth="0.5" />
+                <line x1="0" y1={chartHeight / 2} x2={chartWidth} y2={chartHeight / 2} stroke={isDark ? '#374151' : '#e5e7eb'} strokeWidth="0.5" strokeDasharray="2,2" />
+                <line x1="0" y1={chartHeight} x2={chartWidth} y2={chartHeight} stroke={isDark ? '#374151' : '#e5e7eb'} strokeWidth="0.5" />
 
-                {/* グラデーション定義 */}
-                <defs>
-                    <linearGradient id="lineAreaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="#10b981" stopOpacity="0.4" />
-                        <stop offset="100%" stopColor="#10b981" stopOpacity="0.05" />
-                    </linearGradient>
-                </defs>
+                {/* エリア */}
+                <path d={areaPath} fill="#10b981" fillOpacity="0.2" />
 
-                {/* エリア（グラデーション） */}
-                <path
-                    d={areaPath}
-                    fill="url(#lineAreaGradient)"
-                />
-
-                {/* 折れ線 */}
-                <path
-                    d={linePath}
-                    fill="none"
-                    stroke="#10b981"
-                    strokeWidth="0.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                />
+                {/* ライン */}
+                <path d={linePath} fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
 
                 {/* ポイント */}
-                {points.map((point, index) => (
-                    <circle
-                        key={index}
-                        cx={point.x}
-                        cy={point.y}
-                        r={point.value > 0 ? 0.8 : 0.4}
-                        fill={point.value > 0 ? '#10b981' : isDark ? '#374151' : '#e5e7eb'}
-                    />
+                {points.map((p, i) => (
+                    <circle key={i} cx={p.x} cy={p.y} r="3" fill="#10b981" />
                 ))}
             </svg>
 
             {/* X軸ラベル */}
-            <div className="flex justify-between mt-2 px-1">
-                {displayLabels.map((item, index) => (
+            <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                marginTop: '8px',
+                padding: '0 4px'
+            }}>
+                {displayData.map((item, index) => (
                     <span
                         key={index}
-                        className={`text-[10px] sm:text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+                        style={{
+                            fontSize: '10px',
+                            color: isDark ? '#9ca3af' : '#6b7280',
+                            textAlign: 'center',
+                            flex: 1
+                        }}
                     >
                         {item.label}
                     </span>

@@ -43,18 +43,32 @@ export default function PieChart({ data, isDark }: PieChartProps) {
         };
     };
 
+    // 100%の場合は完全な円を描画
+    const isSingleCategory = data.length === 1 && data[0].percentage >= 99.9;
+
     return (
         <div className="w-full max-w-md mx-auto">
             <svg viewBox="0 0 100 100" className="w-full h-auto">
-                {segments.map((segment, index) => (
-                    <g key={index}>
-                        <path
-                            d={createArc(segment.startAngle, segment.endAngle)}
-                            fill={segment.color}
-                            className="transition-opacity hover:opacity-80 cursor-pointer"
-                        />
-                    </g>
-                ))}
+                {isSingleCategory ? (
+                    /* 1カテゴリのみの場合は完全な円を描画 */
+                    <circle
+                        cx="50"
+                        cy="50"
+                        r="40"
+                        fill={data[0].color}
+                        className="transition-opacity hover:opacity-80 cursor-pointer"
+                    />
+                ) : (
+                    segments.map((segment, index) => (
+                        <g key={index}>
+                            <path
+                                d={createArc(segment.startAngle, segment.endAngle)}
+                                fill={segment.color}
+                                className="transition-opacity hover:opacity-80 cursor-pointer"
+                            />
+                        </g>
+                    ))
+                )}
                 {/* 中央の円（ドーナツグラフ風） */}
                 <circle
                     cx="50"

@@ -34,9 +34,13 @@ export default function LineChart({ data, isDark }: LineChartProps) {
     // エリアパスを生成（グラデーション用）
     const areaPath = `${linePath} L ${points[points.length - 1].x} ${padding + height} L ${points[0].x} ${padding + height} Z`;
 
+    // ラベル表示用のデータを間引く
+    const labelStep = Math.ceil(data.length / 8);
+    const displayLabels = data.filter((_, i) => i % labelStep === 0);
+
     return (
         <div className="w-full">
-            <svg viewBox="0 0 100 80" className="w-full h-auto">
+            <svg viewBox="0 0 100 80" className="w-full h-auto" style={{ minHeight: '200px' }}>
                 {/* グリッド線 */}
                 {[0, 25, 50, 75, 100].map((percent) => {
                     const y = padding + height - (height * percent) / 100;
@@ -85,7 +89,7 @@ export default function LineChart({ data, isDark }: LineChartProps) {
                             fill="#10b981"
                             className="transition-all hover:r-1.5 cursor-pointer"
                         />
-                        {point.value > 0 && (
+                        {point.value > 0 && index % labelStep === 0 && (
                             <text
                                 x={point.x}
                                 y={point.y - 2}
@@ -101,8 +105,8 @@ export default function LineChart({ data, isDark }: LineChartProps) {
 
             {/* X軸ラベル */}
             <div className="flex justify-between mt-2 px-2">
-                {data.filter((_, i) => i % Math.ceil(data.length / 6) === 0).map((item, index) => (
-                    <span key={index} className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                {displayLabels.map((item, index) => (
+                    <span key={index} className={`text-[10px] sm:text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                         {item.label}
                     </span>
                 ))}

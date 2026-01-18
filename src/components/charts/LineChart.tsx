@@ -74,17 +74,32 @@ export default function LineChart({ data, isDark }: LineChartProps) {
                     strokeLinejoin="round"
                 />
 
-                {/* ポイント */}
+                {/* ポイントと金額ラベル */}
                 {points.map((p, i) => (
-                    <circle
-                        key={i}
-                        cx={p.x}
-                        cy={p.y}
-                        r={p.value > 0 ? 4 : 2}
-                        fill={p.value > 0 ? '#10b981' : isDark ? '#4b5563' : '#d1d5db'}
-                        stroke={p.value > 0 ? '#fff' : 'none'}
-                        strokeWidth={p.value > 0 ? 1 : 0}
-                    />
+                    <g key={i}>
+                        {/* 金額ラベル（値がある場合のみ） */}
+                        {p.value > 0 && (
+                            <text
+                                x={p.x}
+                                y={p.y - 8}
+                                textAnchor="middle"
+                                fill={isDark ? '#d1d5db' : '#374151'}
+                                fontSize="9"
+                                fontWeight="600"
+                            >
+                                ¥{p.value.toLocaleString()}
+                            </text>
+                        )}
+                        {/* ポイント */}
+                        <circle
+                            cx={p.x}
+                            cy={p.y}
+                            r={p.value > 0 ? 4 : 2}
+                            fill={p.value > 0 ? '#10b981' : isDark ? '#4b5563' : '#d1d5db'}
+                            stroke={p.value > 0 ? '#fff' : 'none'}
+                            strokeWidth={p.value > 0 ? 1 : 0}
+                        />
+                    </g>
                 ))}
 
                 {/* X軸ラベル */}

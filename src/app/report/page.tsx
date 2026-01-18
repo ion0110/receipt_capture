@@ -64,6 +64,7 @@ export default function ReportPage() {
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
     const [receipts, setReceipts] = useState<Receipt[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [chartType, setChartType] = useState<'bar' | 'line'>('bar');
 
     // 未ログイン時はログインページにリダイレクト
     useEffect(() => {
@@ -359,7 +360,7 @@ export default function ReportPage() {
                         <h2 className={`text-xl sm:text-2xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>カテゴリ別集計</h2>
 
                         {/* 円グラフ */}
-                        <div className="mb-8">
+                        <div className="mb-8 max-w-sm mx-auto">
                             <PieChart data={categoryData} isDark={isDark} />
                         </div>
 
@@ -396,23 +397,37 @@ export default function ReportPage() {
 
                         {/* タブ切り替え */}
                         <div className="flex gap-4 mb-6">
-                            <button className="flex-1 py-2 px-4 rounded-xl font-semibold bg-gradient-to-r from-emerald-500 to-teal-500 text-white">
+                            <button
+                                onClick={() => setChartType('bar')}
+                                className={`flex-1 py-2 px-4 rounded-xl font-semibold transition-all ${chartType === 'bar'
+                                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white'
+                                    : isDark
+                                        ? 'bg-white/10 text-gray-300 hover:bg-white/20'
+                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    }`}
+                            >
                                 棒グラフ
                             </button>
-                            <button className={`flex-1 py-2 px-4 rounded-xl font-semibold ${isDark ? 'bg-white/10 text-gray-300' : 'bg-gray-100 text-gray-700'}`}>
+                            <button
+                                onClick={() => setChartType('line')}
+                                className={`flex-1 py-2 px-4 rounded-xl font-semibold transition-all ${chartType === 'line'
+                                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white'
+                                    : isDark
+                                        ? 'bg-white/10 text-gray-300 hover:bg-white/20'
+                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    }`}
+                            >
                                 折れ線グラフ
                             </button>
                         </div>
 
-                        {/* 棒グラフ */}
-                        <div className="mb-4">
-                            <BarChart data={timeSeriesData} isDark={isDark} />
-                        </div>
-
-                        {/* 折れ線グラフ */}
-                        <div className="mt-8">
-                            <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>推移グラフ</h3>
-                            <LineChart data={timeSeriesData} isDark={isDark} />
+                        {/* グラフ表示 */}
+                        <div className="max-w-4xl mx-auto">
+                            {chartType === 'bar' ? (
+                                <BarChart data={timeSeriesData} isDark={isDark} />
+                            ) : (
+                                <LineChart data={timeSeriesData} isDark={isDark} />
+                            )}
                         </div>
                     </div>
                 )}

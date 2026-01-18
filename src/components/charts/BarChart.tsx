@@ -9,77 +9,61 @@ interface BarChartProps {
 }
 
 export default function BarChart({ data, isDark }: BarChartProps) {
-    if (data.length === 0) return null;
+    if (!data || data.length === 0) return null;
 
     const maxValue = Math.max(...data.map(d => d.value), 1);
 
-    // データが多い場合は間引いて表示（最大15件）
-    const step = Math.ceil(data.length / 15);
+    // データが多い場合は間引く
+    const step = data.length > 15 ? Math.ceil(data.length / 15) : 1;
     const displayData = data.filter((_, i) => i % step === 0);
 
     return (
-        <div style={{ width: '100%', overflowX: 'auto' }}>
-            <div style={{
-                display: 'flex',
-                alignItems: 'flex-end',
-                gap: '4px',
-                height: '200px',
-                padding: '0 8px',
-                minWidth: displayData.length > 10 ? `${displayData.length * 50}px` : '100%'
-            }}>
+        <div className="w-full overflow-x-auto">
+            <div
+                className="flex items-end gap-1"
+                style={{
+                    height: '220px',
+                    minWidth: displayData.length > 12 ? `${displayData.length * 40}px` : 'auto'
+                }}
+            >
                 {displayData.map((item, index) => {
-                    const heightPercent = maxValue > 0 ? (item.value / maxValue) * 100 : 0;
+                    const barHeight = maxValue > 0 ? Math.max((item.value / maxValue) * 160, item.value > 0 ? 4 : 0) : 0;
+
                     return (
                         <div
                             key={index}
-                            style={{
-                                flex: 1,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                height: '100%',
-                                minWidth: '30px'
-                            }}
+                            className="flex flex-col items-center flex-1"
+                            style={{ minWidth: '28px' }}
                         >
-                            {/* 金額ラベル */}
-                            {item.value > 0 && (
-                                <div style={{
-                                    fontSize: '10px',
-                                    fontWeight: '600',
-                                    color: isDark ? '#d1d5db' : '#374151',
-                                    marginBottom: '4px',
-                                    whiteSpace: 'nowrap'
-                                }}>
-                                    ¥{item.value.toLocaleString()}
-                                </div>
-                            )}
+                            {/* 金額 */}
+                            <div
+                                className={`text-xs font-semibold mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}
+                                style={{ height: '20px', fontSize: '9px' }}
+                            >
+                                {item.value > 0 ? `¥${item.value.toLocaleString()}` : ''}
+                            </div>
 
-                            {/* バーコンテナ */}
-                            <div style={{
-                                flex: 1,
-                                width: '100%',
-                                display: 'flex',
-                                alignItems: 'flex-end'
-                            }}>
-                                {/* バー本体 */}
+                            {/* バーエリア */}
+                            <div
+                                className="flex items-end justify-center w-full"
+                                style={{ height: '160px' }}
+                            >
+                                {/* バー */}
                                 <div
+                                    className="w-4/5 rounded-t"
                                     style={{
-                                        width: '100%',
-                                        height: `${heightPercent}%`,
-                                        minHeight: item.value > 0 ? '4px' : '0px',
-                                        background: 'linear-gradient(to top, #10b981, #2dd4bf)',
-                                        borderRadius: '4px 4px 0 0'
+                                        height: `${barHeight}px`,
+                                        background: 'linear-gradient(to top, #059669, #10b981, #34d399)',
+                                        minWidth: '8px'
                                     }}
                                 />
                             </div>
 
-                            {/* 日付ラベル */}
-                            <div style={{
-                                fontSize: '10px',
-                                color: isDark ? '#9ca3af' : '#6b7280',
-                                marginTop: '4px',
-                                whiteSpace: 'nowrap'
-                            }}>
+                            {/* ラベル */}
+                            <div
+                                className={`text-xs mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+                                style={{ fontSize: '9px' }}
+                            >
                                 {item.label}
                             </div>
                         </div>

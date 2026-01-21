@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Calendar, TrendingUp, Download, Printer, ArrowLeft, Sun, Moon, LogOut } from 'lucide-react';
+import { Calendar, TrendingUp, Download, Sun, Moon, LogOut } from 'lucide-react';
 import { db, signOut } from '@/lib/firebase';
 import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
 import { useAuth } from '@/contexts/auth-context';
@@ -441,14 +441,6 @@ export default function ReportPage() {
                     >
                         <Download className="w-5 h-5" />
                         CSVエクスポート
-                    </button>
-                    <button
-                        onClick={() => window.print()}
-                        disabled={receipts.length === 0}
-                        className={isDark ? 'flex-1 bg-white/10 text-white font-bold py-3 sm:py-4 px-6 rounded-xl hover:bg-white/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2' : 'flex-1 bg-gray-200 text-gray-800 font-bold py-3 sm:py-4 px-6 rounded-xl hover:bg-gray-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2'}
-                    >
-                        <Printer className="w-5 h-5" />
-                        印刷
                     </button>
                 </div>
             </div>

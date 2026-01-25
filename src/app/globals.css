@@ -89,32 +89,20 @@ body {
 }
 
 /* 印刷用スタイル */
-/* 印刷用スタイル */
 @media print {
+
   /* ページ設定 */
   @page {
     size: A4;
-    margin: 0mm;
+    margin: 3mm;
   }
 
   /* 基本設定 */
-  html, body {
-    width: 210mm;
-    height: 297mm;
+  html,
+  body {
     background: white !important;
     color: black !important;
-    font-size: 9px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-  }
-
-  /* コンテンツ全体をラッパーで制御 */
-  body > div {
-    width: 210mm !important;
-    margin: 0 auto !important;
-    padding: 5mm !important;
-    box-sizing: border-box !important;
+    font-size: 8px !important;
   }
 
   /* ヘッダーを非表示 */
@@ -128,15 +116,17 @@ body {
   }
 
   .py-8 {
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
   }
 
-  .mb-8, .mb-6 {
+  .mb-8,
+  .mb-6 {
     margin-bottom: 2px !important;
   }
 
-  .p-4, .p-6 {
+  .p-4,
+  .p-6 {
     padding: 4px !important;
   }
 
@@ -145,60 +135,95 @@ body {
   }
 
   /* カード設定 */
-  .bg-white\/10, .backdrop-blur-lg, .backdrop-blur-md {
+  .bg-white\/10,
+  .backdrop-blur-lg,
+  .backdrop-blur-md {
     background: white !important;
     backdrop-filter: none !important;
-    border: 1px solid #ddd !important;
-    box-shadow: none !important;
+    border: 1px solid #ccc !important;
   }
 
+  /* グラデーション背景を削除 */
   .bg-gradient-to-br {
     background: white !important;
   }
 
   /* テキスト色 */
-  h1, h2, h3, p, span, div {
+  h1,
+  h2,
+  h3,
+  p,
+  span,
+  div {
     color: black !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  /* タイトル */
-  h1 { font-size: 14px !important; margin-bottom: 2px !important; }
-  h2 { font-size: 11px !important; margin-bottom: 2px !important; }
+  /* タイトルサイズ縮小 */
+  h1 {
+    font-size: 14px !important;
+    margin-bottom: 2px !important;
+  }
 
-  /* 非表示要素 */
-  button, a[href="/history"], .fixed, .sticky {
+  h2 {
+    font-size: 10px !important;
+    margin-bottom: 2px !important;
+  }
+
+  /* ボタンを非表示 */
+  button {
     display: none !important;
   }
 
-  /* グラフサイズ */
-  .max-w-sm { max-width: 80px !important; margin: 0 auto !important; }
-  .print-section-2 { max-height: 120px !important; }
-  .print-section-2 svg { max-height: 70px !important; }
+  /* 戻るリンクを非表示 */
+  a[href="/history"] {
+    display: none !important;
+  }
 
-  /* サマリー */
-  .grid.grid-cols-2 { gap: 2px !important; }
-  .rounded-2xl { padding: 3px !important; border-radius: 4px !important; }
+  /* 円グラフを小さく */
+  .max-w-sm {
+    max-width: 80px !important;
+  }
 
-  /* 縮小設定 - ページ内に収める */
+  /* グラフ高さを縮小 */
+  .print-section-2 {
+    max-height: 120px !important;
+  }
+
+  .print-section-2 svg {
+    max-height: 70px !important;
+  }
+
+  /* サマリーカードを小さく */
+  .grid.grid-cols-2 {
+    gap: 2px !important;
+  }
+
+  .rounded-2xl {
+    padding: 3px !important;
+  }
+
+  /* 全体を縮小して1ページに収める */
   .min-h-screen {
-    min-height: 0 !important;
-    height: auto !important;
-    width: 100% !important;
-    transform: scale(0.9) !important;
-    transform-origin: top center !important;
-    margin-left: 0 !important;
+    min-height: auto !important;
+    transform: scale(0.80);
+    transform-origin: top center;
+    width: 125%;
+    margin-left: -12.5%;
   }
 
-  /* 改ページ制御 */
-  .rounded-3xl, .rounded-2xl, .grid, .flex {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
+  /* 各セクションは分割しない */
+  .rounded-3xl,
+  .rounded-2xl {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 2px !important;
   }
 
-  /* SVG */
-  svg, svg * {
+  /* SVGとグラフの色を保持 */
+  svg,
+  svg * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
